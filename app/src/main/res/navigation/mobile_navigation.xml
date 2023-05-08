@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_scan">
+
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="ru.savenkov.paychecksapp.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_scan"
+        android:name="ru.savenkov.paychecksapp.ui.scan.ScanFragment"
+        android:label="@string/title_scan"
+        tools:layout="@layout/fragment_scan" >
+        <action
+            android:id="@+id/action_navigation_scan_to_checkFragment"
+            app:destination="@id/checkFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="ru.savenkov.paychecksapp.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/checkFragment"
+        android:name="ru.savenkov.paychecksapp.ui.check.CheckFragment"
+        android:label="fragment_check"
+        tools:layout="@layout/fragment_check" />
+</navigation>
