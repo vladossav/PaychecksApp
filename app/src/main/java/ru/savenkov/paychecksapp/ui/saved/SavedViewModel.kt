@@ -1,4 +1,4 @@
-package ru.savenkov.paychecksapp.ui.dashboard
+package ru.savenkov.paychecksapp.ui.saved
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
