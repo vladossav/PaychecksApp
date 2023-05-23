@@ -1,4 +1,6 @@
 package ru.savenkov.paychecksapp
 
-class App {
+import android.app.Application
+
+class App: Application() {
 }

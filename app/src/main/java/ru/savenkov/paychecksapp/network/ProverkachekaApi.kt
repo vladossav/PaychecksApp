@@ -36,6 +36,5 @@ interface ProverkachekaApi {
 
             return retrofit.create(ProverkachekaApi::class.java)
         }
-
     }
 }

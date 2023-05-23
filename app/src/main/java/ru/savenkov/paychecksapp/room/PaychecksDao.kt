@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PaychecksDao {
-    @Query("REPLACE INTO recent VALUES (:binNum,datetime('now','localtime'))" )
-    suspend fun insert(binNum: String)
+    /*@Query("REPLACE INTO recent VALUES (:binNum,datetime('now','localtime'))" )
+    suspend fun insert(binNum: String)*/
 
-    @Query("DELETE FROM recent")
-    suspend fun deleteAll()
+    /*@Query("DELETE FROM check")
+    suspend fun deleteAll()*/
 
-    @Query("SELECT bin_number FROM recent ORDER BY last_visit DESC")
-    fun getRecentList(): Flow<MutableList<String>>
+   /* @Query("SELECT bin_number FROM recent ORDER BY last_visit DESC")
+    fun getRecentList(): Flow<MutableList<String>>*/
 }

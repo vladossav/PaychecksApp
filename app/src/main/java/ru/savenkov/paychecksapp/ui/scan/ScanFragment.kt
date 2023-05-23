@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
@@ -43,35 +41,10 @@ class ScanFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val scanViewModel =
-            ViewModelProvider(this).get(ScanViewModel::class.java)
-        val activity = requireActivity()
         binding = FragmentScanBinding.inflate(inflater, container, false)
-        codeScanner = CodeScanner(activity, binding!!.scannerView)
-        codeScanner.camera = CodeScanner.CAMERA_BACK
-        codeScanner.formats = listOf(BarcodeFormat.QR_CODE)
-        codeScanner.autoFocusMode = AutoFocusMode.SAFE
 
-        codeScanner.decodeCallback = DecodeCallback {
-            codeScanner.releaseResources()
-            activity.runOnUiThread {
-                findNavController().navigate(
-                    R.id.action_navigation_scan_to_checkFragment,
-                    bundleOf(CheckFragment.QR_RAW_KEY to it.text)
-                )
-                Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
-            }
-        }
+        initQrScanner()
 
-        codeScanner.errorCallback = ErrorCallback {
-            activity.runOnUiThread {
-                Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-            }
-        }
-
-        binding!!.scannerView.setOnClickListener {
-            codeScanner.startPreview()
-        }
         return binding!!.root
     }
 
@@ -86,7 +59,36 @@ class ScanFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         binding = null
+        super.onDestroyView()
+    }
+
+    private fun initQrScanner() {
+        val activity = requireActivity()
+        codeScanner = CodeScanner(activity, binding!!.scannerView)
+        codeScanner.apply {
+            camera = CodeScanner.CAMERA_BACK
+            formats = listOf(BarcodeFormat.QR_CODE)
+            autoFocusMode = AutoFocusMode.SAFE
+            decodeCallback = DecodeCallback {
+                releaseResources()
+                activity.runOnUiThread {
+                    findNavController().navigate(
+                        R.id.action_navigation_scan_to_checkFragment,
+                        bundleOf(CheckFragment.QR_RAW_KEY to it.text)
+                    )
+                    Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
+                }
+            }
+            errorCallback = ErrorCallback {
+                activity.runOnUiThread {
+                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        binding!!.scannerView.setOnClickListener {
+            codeScanner.startPreview()
+        }
     }
 }

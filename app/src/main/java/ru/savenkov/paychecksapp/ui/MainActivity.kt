@@ -1,4 +1,4 @@
-package ru.savenkov.paychecksapp
+package ru.savenkov.paychecksapp.ui
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -9,10 +9,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,14 +21,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setNavGraph()
+    }
+
+    private fun setNavGraph() {
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_saved, R.id.navigation_scan,  R.id.navigation_statistics
+                R.id.navigation_saved, R.id.navigation_scan, R.id.navigation_statistics
             )
         )
-
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
