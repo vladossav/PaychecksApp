@@ -7,13 +7,18 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import ru.savenkov.paychecksapp.model.CheckItem
+import ru.savenkov.paychecksapp.data
+import ru.savenkov.paychecksapp.network.model.CheckItem
 import ru.savenkov.paychecksapp.network.ProverkachekaApi
 import java.io.IOException
 
 class CheckViewModel: ViewModel() {
-
+    private lateinit var checkItem: CheckItem
     private val api = ProverkachekaApi.create()
+
+    fun getCheckFromMock() {
+        checkItem = data
+    }
 
     fun getCheckFromApi(qrRaw: String) = viewModelScope.launch(Dispatchers.IO) {
         //loading.postValue(true)
@@ -38,8 +43,8 @@ class CheckViewModel: ViewModel() {
 
         if (response.isSuccessful && response.body() != null) {
             val res = response.body()
-            val check: CheckItem = res!!
-            Log.d("CheckApi", check.toString())
+            checkItem = res!!
+            Log.d("CheckApi", checkItem.toString())
             Log.d("CheckApi", response.message())
         } else {
             Log.e("CheckApi", "Response not successful")

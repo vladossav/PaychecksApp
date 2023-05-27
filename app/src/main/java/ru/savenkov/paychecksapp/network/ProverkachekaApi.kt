@@ -10,7 +10,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import ru.savenkov.paychecksapp.TOKEN
-import ru.savenkov.paychecksapp.model.CheckItem
+import ru.savenkov.paychecksapp.network.model.CheckItem
 
 interface ProverkachekaApi {
     @FormUrlEncoded

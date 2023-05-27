@@ -9,14 +9,14 @@ import androidx.room.PrimaryKey
     tableName = "check",
     foreignKeys = [ForeignKey(
         entity = CategoryEntity::class,
-        childColumns = ["category_code"],
+        childColumns = ["categoryCode"],
         parentColumns = ["code"],
         onDelete = ForeignKey.CASCADE,
         onUpdate = ForeignKey.CASCADE
     ),
         ForeignKey(
             entity = ShopEntity::class,
-            childColumns = ["shop_id"],
+            childColumns = ["shopId"],
             parentColumns = ["id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE
@@ -24,14 +24,10 @@ import androidx.room.PrimaryKey
     ]
 )
 data class CheckEntity(
-    @PrimaryKey
-    val id: Long,
-    @ColumnInfo(name = "date_time")
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
     val dateTime: String,
-    @ColumnInfo(name = "category_code")
-    val codeCategory: Int,
-    @ColumnInfo(name = "shop_id")
+    val categoryCode: Int,
     val shopId: Int,
-    @ColumnInfo(name = "total_sum")
     val totalSum: Int
 )
