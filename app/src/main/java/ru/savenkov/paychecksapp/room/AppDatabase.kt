@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.savenkov.paychecksapp.room.entities.*
+import java.util.concurrent.Executors
 
 @Database(
     version = 1,
     entities = [CheckEntity::class, CheckDetailsEntity::class,
-        GoodEntity::class, ShopEntity::class, CategoryEntity::class], exportSchema = false
+         CategoryEntity::class, GoodEntity::class], exportSchema = false
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract fun getPaychecksDao(): PaychecksDao
@@ -24,7 +25,8 @@ abstract class AppDatabase: RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "paychecks"
-                ).fallbackToDestructiveMigration().build()
+                ).createFromAsset("paychecks.db")
+                    .fallbackToDestructiveMigration().build()
 
                 INSTANCE = instance
                 instance

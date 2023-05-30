@@ -3,6 +3,10 @@ package ru.savenkov.paychecksapp.network.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import ru.savenkov.paychecksapp.room.entities.CheckAllInfoTuple
+import ru.savenkov.paychecksapp.room.entities.CheckDetailsEntity
+import ru.savenkov.paychecksapp.room.entities.CheckEntity
+import ru.savenkov.paychecksapp.room.entities.GoodEntity
 
 @JsonClass(generateAdapter = true)
 data class CheckItem(
@@ -66,4 +70,49 @@ data class CheckItem(
             )
         }
     }
+
+    fun toCheckEntity(): CheckEntity {
+        val checkItem = data.jsonObj
+        return CheckEntity(
+            0,
+            checkItem.dateTime,
+            null,
+            checkItem.totalSum
+        )
+    }
+
+    fun toCheckDetailsEntity() : CheckDetailsEntity {
+        val checkItem = data.jsonObj
+        return CheckDetailsEntity(
+            0,
+            checkItem.requestNumber,
+            checkItem.operationType,
+            checkItem.operator,
+            checkItem.shiftNumber,
+            checkItem.fiscalDocumentNumber,
+            checkItem.fiscalDriveNumber,
+            checkItem.fiscalSign,
+            checkItem.kktRegId,
+            checkItem.numberKkt,
+            checkItem.region,
+            checkItem.retailPlace,
+            checkItem.retailPlaceAddress,
+            checkItem.user,
+            checkItem.userInn,
+        )
+    }
+
+    fun toGoodEntityList(): List<GoodEntity> {
+        return data.jsonObj.items.map {
+            GoodEntity(0, 0,it.name,
+                it.price, it.quantity, it.sum)
+        }
+    }
+
+    fun toCheckAllInfo(): CheckAllInfoTuple =
+        CheckAllInfoTuple(
+            toCheckEntity(),
+            toCheckDetailsEntity(),
+            toGoodEntityList()
+        )
 }

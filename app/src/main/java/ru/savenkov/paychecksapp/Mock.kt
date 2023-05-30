@@ -1,6 +1,10 @@
 package ru.savenkov.paychecksapp
 
 import ru.savenkov.paychecksapp.network.model.CheckItem
+import ru.savenkov.paychecksapp.room.entities.CheckAllInfoTuple
+import ru.savenkov.paychecksapp.room.entities.CheckDetailsEntity
+import ru.savenkov.paychecksapp.room.entities.CheckEntity
+import ru.savenkov.paychecksapp.room.entities.GoodEntity
 
 val data: CheckItem = CheckItem(
     data = CheckItem.Data(
@@ -102,3 +106,27 @@ val data: CheckItem = CheckItem(
     ),
     code = 1
 )
+
+/*
+val checkItem = data.data.jsonObj
+
+val checkEntity = CheckEntity(0,
+    checkItem.dateTime,
+    null,
+    checkItem.totalSum
+)
+
+val checkDetailsEntity = CheckDetailsEntity(
+)
+
+
+val goodsEntity = checkItem.items.map {
+    GoodEntity(0, checkEntity.id,it.name,
+        it.price, it.quantity, it.sum)
+}
+
+
+val checkAllInfoEntity = CheckAllInfoTuple(
+    checkEntity, checkDetailsEntity,
+    goodsEntity
+)*/

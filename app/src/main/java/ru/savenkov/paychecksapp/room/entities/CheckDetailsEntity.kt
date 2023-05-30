@@ -1,6 +1,5 @@
 package ru.savenkov.paychecksapp.room.entities
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
@@ -17,7 +16,7 @@ import androidx.room.PrimaryKey
 )
 data class CheckDetailsEntity(
     @PrimaryKey
-    val checkId: Long,
+    var checkId: Long,
     val requestNumber: Int, //номер чека
     val operationType: Int, //Тип операции
     val operator: String, //кассир
@@ -27,4 +26,10 @@ data class CheckDetailsEntity(
     val fiscalSign: Int, //ФП
     val kktRegId: String, //Рег № ККТ
     val numberKkt: String, //ЗН ККТ
+
+    val region: String, //код региона
+    val retailPlace: String, //Название магазина
+    val retailPlaceAddress: String, //Адрес магазина
+    val user: String, //Организация
+    val userInn: String //ИНН Организации
 )

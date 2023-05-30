@@ -1,10 +1,20 @@
 package ru.savenkov.paychecksapp.room.entities
 
 import androidx.room.Embedded
+import androidx.room.Relation
+
 
 data class CheckAllInfoTuple(
-    @Embedded val categoryEntity: CategoryEntity?,
-    @Embedded val checkEntity: CheckEntity,
-    @Embedded val checkDetailsEntity: CheckDetailsEntity,
-
+    @Embedded
+    val check: CheckEntity,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "checkId",
+    )
+    val details: CheckDetailsEntity,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "checkId"
+    )
+    val goods: List<GoodEntity>
 )

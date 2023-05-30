@@ -5,7 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "good",
+    tableName = "goods",
     foreignKeys = [ForeignKey(
         entity = CheckEntity::class,
         childColumns = ["checkId"],
@@ -17,7 +17,7 @@ import androidx.room.PrimaryKey
 data class GoodEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val checkId: Long,
+    var checkId: Long,
     val name: String,
     val price: Int,
     val quantity: Float,
