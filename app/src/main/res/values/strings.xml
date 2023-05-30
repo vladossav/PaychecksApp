@@ -4,15 +4,21 @@
     <string name="title_saved">Saved</string>
     <string name="title_statistics">Statistics</string>
 
-    <string name="check_shop_userInn">ИНН </string>
-    <string name="check_number">Чек № </string>
-    <string name="check_shift_number">Смена № </string>
-    <string name="check_operator">Кассир </string>
+    <string name="check_shop_userInn">ИНН</string>
+    <string name="check_number">Чек №</string>
+    <string name="check_shift_number">Смена №</string>
+    <string name="check_operator">Кассир</string>
     <string name="good_number">№</string>
     <string name="good_name">Название</string>
     <string name="good_price">Цена</string>
     <string name="good_quantity">Кол-во</string>
     <string name="good_sum">Сумма</string>
+    <string name="check_total_sum">ИТОГО</string>
+    <string name="check_reg_id_kkt">РЕГ. НОМЕР ККТ:</string>
+    <string name="check_number_kkt">ЗАВОД. № ККТ:</string>
+    <string name="check_fn">ФН:</string>
+    <string name="check_fd">ФД:</string>
+    <string name="check_fpd">ФПД:</string>
 
 
 </resources>

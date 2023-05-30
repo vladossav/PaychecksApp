@@ -1,10 +1,6 @@
 package ru.savenkov.paychecksapp
 
-import ru.savenkov.paychecksapp.network.model.CheckItem
-import ru.savenkov.paychecksapp.room.entities.CheckAllInfoTuple
-import ru.savenkov.paychecksapp.room.entities.CheckDetailsEntity
-import ru.savenkov.paychecksapp.room.entities.CheckEntity
-import ru.savenkov.paychecksapp.room.entities.GoodEntity
+import ru.savenkov.paychecksapp.model.network.data.CheckItem
 
 val data: CheckItem = CheckItem(
     data = CheckItem.Data(

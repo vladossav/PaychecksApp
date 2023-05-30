@@ -6,8 +6,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/goodNumber"
-        android:layout_marginStart="10dp"
+        android:id="@+id/goodNumberTitleGone"
+        android:text="@string/good_number"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -15,39 +20,114 @@
         />
 
     <TextView
-        android:id="@+id/goodName"
+        android:id="@+id/goodNameTitleGone"
+        android:text="@string/good_name"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/goodNumber"
+        app:layout_constraintStart_toEndOf="@id/goodNumberTitleGone"
         />
 
     <TextView
-        android:id="@+id/goodSum"
+        android:id="@+id/goodSumTitleGone"
+        android:text="@string/good_sum"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
     <TextView
-        android:id="@+id/goodQuantity"
+        android:id="@+id/goodQuantityTitleGone"
+        android:text="@string/good_quantity"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/goodSum"
+        app:layout_constraintEnd_toStartOf="@id/goodSumTitleGone"
+        />
 
+    <TextView
+        android:id="@+id/goodPriceTitleGone"
+        android:text="@string/good_price"
+        android:visibility="invisible"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/goodQuantityTitleGone"
+        />
+
+    <TextView
+        android:id="@+id/goodNumber"
+        android:text="123"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/goodNumberTitleGone"
+        />
+
+    <TextView
+        android:id="@+id/goodName"
+        android:text="awdwdawdawdawdaw awda wa  awdawd a  aw daw daw daw  awdawdaw"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintStart_toStartOf="@id/goodNameTitleGone"
+        app:layout_constraintEnd_toStartOf="@id/goodPriceTitleGone"
+        />
+
+    <TextView
+        android:id="@+id/goodSum"
+        android:text="233313.23"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/goodSumTitleGone"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/goodQuantity"
+        android:text="10.123"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="@id/goodQuantityTitleGone"
+        app:layout_constraintEnd_toStartOf="@id/goodSumTitleGone"
         />
 
     <TextView
         android:id="@+id/goodPrice"
-        android:layout_width="wrap_content"
+        android:text="123000.12"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="5dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/goodQuantity"
+        app:layout_constraintStart_toStartOf="@id/goodPriceTitleGone"
+        app:layout_constraintEnd_toStartOf="@id/goodQuantityTitleGone"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
