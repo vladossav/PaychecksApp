@@ -3,10 +3,7 @@ package ru.savenkov.paychecksapp.model.network.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import ru.savenkov.paychecksapp.model.room.entities.CheckAllInfoTuple
-import ru.savenkov.paychecksapp.model.room.entities.CheckDetailsEntity
-import ru.savenkov.paychecksapp.model.room.entities.CheckEntity
-import ru.savenkov.paychecksapp.model.room.entities.GoodEntity
+import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class CheckItem(
@@ -19,7 +16,7 @@ data class CheckItem(
     //4 - ожидание перед повторным запросом,
     //5 - прочее (данные не получены)
     val data: Data = Data()
-) {
+): Serializable {
     @JsonClass(generateAdapter = true)
     data class Data(
         @Json(name = "json")
@@ -44,7 +41,7 @@ data class CheckItem(
             val numberKkt: String = "", //ЗН ККТ
             val fiscalDocumentNumber: Int = 0, //ФД
             val fiscalDriveNumber: String = "", //ФН
-            val fiscalSign: Int = 0, //ФП
+            val fiscalSign: String = "", //ФП
 
             val region: String = "", //код региона
             val retailPlace: String = "", //Название магазина

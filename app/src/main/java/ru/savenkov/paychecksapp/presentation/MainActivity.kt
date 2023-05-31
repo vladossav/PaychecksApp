@@ -2,15 +2,19 @@ package ru.savenkov.paychecksapp.presentation
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.widget.Toast
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.databinding.ActivityMainBinding
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -25,15 +29,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setNavGraph() {
-        val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_saved, R.id.navigation_scan, R.id.navigation_statistics
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+
+        navController.let { binding.navView.setSetupWithNavController(it) }
     }
 
     override fun onRequestPermissionsResult(
@@ -50,4 +48,28 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun BottomNavigationView.setSetupWithNavController(navController: NavController?) {
+        navController?.let {
+            setupWithNavController(it)
+        }
+        setOnItemSelectedListener { menuItem ->
+            val builder = NavOptions.Builder().setLaunchSingleTop(true).setRestoreState(false)
+            val graph = navController?.currentDestination?.parent
+            val destination = graph?.findNode(menuItem.itemId)
+            if (menuItem.order and Menu.CATEGORY_SECONDARY == 0) {
+                navController?.graph?.findStartDestination()?.id?.let {
+                    builder.setPopUpTo(
+                        it,
+                        inclusive = false,
+                        saveState = true
+                    )
+                }
+            }
+            val options = builder.build()
+            destination?.id?.let { id -> navController.navigate(id, null, options) }
+            return@setOnItemSelectedListener true
+        }
+    }
+
 }

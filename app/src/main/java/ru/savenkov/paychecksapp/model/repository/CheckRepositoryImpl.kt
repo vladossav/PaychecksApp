@@ -6,34 +6,32 @@ import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.model.network.ProverkachekaApi
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 import ru.savenkov.paychecksapp.model.room.AppDatabase
-import ru.savenkov.paychecksapp.model.room.entities.CheckAllInfoTuple
 import ru.savenkov.paychecksapp.presentation.model.CheckAll
+import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 import java.io.IOException
 
-class CheckRepository(db: AppDatabase) {
+class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
     private val dao = db.getPaychecksDao()
     private val api = ProverkachekaApi.create()
 
-    suspend fun insertCheck(checkItem: CheckItem) {
+    override suspend fun insertCheck(checkItem: CheckItem) {
 
         val entity = Converter.toDatabase(checkItem)
 
         try {
-            val id = dao.insertAllCheckInfo(entity)
-            //val id = dao.insertCheck(checkEntity2)
-            Log.d("Room", id.toString())
+            dao.insertAllCheckInfo(entity)
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())
         }
     }
 
-    suspend fun getAllCheckInfoById(id: Long): CheckAll? {
+    override suspend fun getAllCheckInfoById(id: Long): CheckAll? {
         var check: CheckAll? = null
         try {
             val checkEntity = dao.getAllCheckInfoById(id)
             check = CheckAll(
-                Converter.checkInfoToUser(checkEntity),
-                Converter.goodsToUser(checkEntity)
+                Converter.checkInfoToView(checkEntity),
+                Converter.goodsToView(checkEntity)
             )
         }
         catch (err: Exception) {
@@ -42,7 +40,7 @@ class CheckRepository(db: AppDatabase) {
         return check
     }
 
-    suspend fun getCheckFromApi(qrRaw: String): CheckItem? {
+    override suspend fun getCheckFromApi(qrRaw: String): CheckItem? {
         Log.d("CheckApi","input qrraw: $qrRaw")
         var checkItem: CheckItem? = null
 

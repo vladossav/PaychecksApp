@@ -5,15 +5,55 @@ import ru.savenkov.paychecksapp.model.room.entities.CheckAllInfoTuple
 import ru.savenkov.paychecksapp.model.room.entities.CheckDetailsEntity
 import ru.savenkov.paychecksapp.model.room.entities.CheckEntity
 import ru.savenkov.paychecksapp.model.room.entities.GoodEntity
+import ru.savenkov.paychecksapp.presentation.model.CheckAll
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
 import ru.savenkov.paychecksapp.presentation.model.CheckInfo
 
 object Converter {
     fun toDatabase(checkItem: CheckItem): CheckAllInfoTuple = toCheckAllInfo(checkItem)
 
-    fun toUser(checkItem: CheckItem) {}
+    /*fun toDatabaseFromView(checkItem: CheckAll): CheckAllInfoTuple {
 
-    fun goodsToUser(checkAllInfoTuple: CheckAllInfoTuple): List<CheckGood> = checkAllInfoTuple.goods.map {
+    }*/
+
+    fun toView(checkItem: CheckItem):CheckAll {
+        val goodsList = checkItem.data.jsonObj.items.map {
+            CheckGood(
+                0,
+                0,
+                it.name,
+                toRubleToString(it.price),
+                it.quantity.toString(),
+                toRubleToString(it.sum)
+            )
+        }
+        val item = checkItem.data.jsonObj
+        val checkDetails = CheckInfo(
+            0,
+            item.dateTime.replace("T".toRegex()," "),
+            "",
+            toRubleToString(item.totalSum),
+            item.requestNumber.toString(),
+            getOperationFromCode(item.operationType),
+            item.operator,
+            item.shiftNumber.toString(),
+            item.fiscalDocumentNumber.toString(),
+            item.fiscalDriveNumber,
+            item.fiscalSign.toString(),
+            item.kktRegId,
+            item.numberKkt,
+            item.region,
+            item.retailPlace,
+            item.retailPlaceAddress,
+            item.user,
+            item.userInn
+        )
+        return CheckAll(
+            checkDetails, goodsList
+        )
+    }
+
+    fun goodsToView(checkAllInfoTuple: CheckAllInfoTuple): List<CheckGood> = checkAllInfoTuple.goods.map {
         CheckGood(
             it.checkId,
             it.id,
@@ -24,7 +64,7 @@ object Converter {
         )
     }
 
-    fun checkInfoToUser(checkAllInfo: CheckAllInfoTuple): CheckInfo =
+    fun checkInfoToView(checkAllInfo: CheckAllInfoTuple): CheckInfo =
         CheckInfo(
             checkAllInfo.check.id,
             checkAllInfo.check.dateTime.replace("T".toRegex()," "),
@@ -47,12 +87,12 @@ object Converter {
         )
 
 
-    fun toRubleToString(kopeck: Int): String {
+    private fun toRubleToString(kopeck: Int): String {
         val ruble: Double = kopeck.toDouble() / 100
         return ruble.toString()
     }
 
-    fun getOperationFromCode(code: Int)  =
+    private fun getOperationFromCode(code: Int)  =
         when(code) {
             1 -> "Приход"
             2 -> "Возврат прихода"
@@ -81,7 +121,7 @@ object Converter {
             item.shiftNumber,
             item.fiscalDocumentNumber,
             item.fiscalDriveNumber,
-            item.fiscalSign,
+            item.fiscalSign.toInt(),
             item.kktRegId,
             item.numberKkt,
             item.region,

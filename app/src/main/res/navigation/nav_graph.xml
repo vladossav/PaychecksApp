@@ -14,12 +14,13 @@
 
     <fragment
         android:id="@+id/navigation_scan"
-        android:name="ru.savenkov.paychecksapp.presentation.screens.check.CheckFragment"
+        android:name="ru.savenkov.paychecksapp.presentation.screens.scan.ScanFragment"
         android:label="@string/title_scan"
-        tools:layout="@layout/fragment_check" >
+        tools:layout="@layout/fragment_scan" >
         <action
             android:id="@+id/action_navigation_scan_to_checkFragment"
-            app:destination="@id/checkFragment" />
+            app:destination="@id/checkFragment"
+            />
     </fragment>
 
     <fragment
@@ -32,5 +33,13 @@
         android:id="@+id/checkFragment"
         android:name="ru.savenkov.paychecksapp.presentation.screens.check.CheckFragment"
         android:label="fragment_check"
-        tools:layout="@layout/fragment_check" />
+        tools:layout="@layout/fragment_check" >
+        <action
+            android:id="@+id/action_checkFragment_to_categoryDialogFragment"
+            app:destination="@id/categoryDialogFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/categoryDialogFragment"
+        android:name="ru.savenkov.paychecksapp.presentation.screens.check.CategoryDialogFragment"
+        android:label="CategoryDialogFragment" />
 </navigation>

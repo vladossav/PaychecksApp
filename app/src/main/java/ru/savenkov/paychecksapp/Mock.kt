@@ -9,7 +9,7 @@ val data: CheckItem = CheckItem(
             dateTime= "2022-09-12T17:53:00",
             fiscalDocumentNumber= 15488,
             fiscalDriveNumber = "9960440502833901",
-            fiscalSign=836979144,
+            fiscalSign="836979144",
             items = listOf(
                 CheckItem.Data.JsonObj.Item(
                     name= "Пакет белый без логотипа майка пнд(28+16)*50, 15 мкм/2000",
