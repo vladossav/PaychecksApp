@@ -1,22 +1,35 @@
 package ru.savenkov.paychecksapp.converter
 
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
-import ru.savenkov.paychecksapp.model.room.entities.CheckAllInfoTuple
-import ru.savenkov.paychecksapp.model.room.entities.CheckDetailsEntity
-import ru.savenkov.paychecksapp.model.room.entities.CheckEntity
-import ru.savenkov.paychecksapp.model.room.entities.GoodEntity
+import ru.savenkov.paychecksapp.model.room.entities.*
+import ru.savenkov.paychecksapp.presentation.model.Check
 import ru.savenkov.paychecksapp.presentation.model.CheckAll
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
 import ru.savenkov.paychecksapp.presentation.model.CheckInfo
 
 object Converter {
-    fun toDatabase(checkItem: CheckItem): CheckAllInfoTuple = toCheckAllInfo(checkItem)
 
-    /*fun toDatabaseFromView(checkItem: CheckAll): CheckAllInfoTuple {
 
-    }*/
+    fun toDatabase(checkItem: CheckItem, category: String? = ""): CheckAllInfoTuple =
+        CheckAllInfoTuple(
+            toCheckEntity(checkItem, category),
+            toCheckDetailsEntity(checkItem),
+            toGoodEntityList(checkItem)
+        )
 
-    fun toView(checkItem: CheckItem):CheckAll {
+    fun toView(checksEntityList: List<CheckEntity>): List<Check> = checksEntityList.map { check ->
+        Check(
+            check.id,
+            check.dateTime,
+            check.category,
+            toRubleToString(check.totalSum)
+        )
+    }
+
+    fun categoryToView(categoryEntityList: List<CategoryEntity>): List<String> =
+        categoryEntityList.map { it.name }
+
+    fun fullCheckToView(checkItem: CheckItem):CheckAll {
         val goodsList = checkItem.data.jsonObj.items.map {
             CheckGood(
                 0,
@@ -39,7 +52,7 @@ object Converter {
             item.shiftNumber.toString(),
             item.fiscalDocumentNumber.toString(),
             item.fiscalDriveNumber,
-            item.fiscalSign.toString(),
+            item.fiscalSign,
             item.kktRegId,
             item.numberKkt,
             item.region,
@@ -101,12 +114,12 @@ object Converter {
             else -> ""
         }
 
-    private fun toCheckEntity(checkItem: CheckItem): CheckEntity {
+    private fun toCheckEntity(checkItem: CheckItem, category: String?): CheckEntity {
         val item = checkItem.data.jsonObj
         return CheckEntity(
             0,
             item.dateTime,
-            null,
+            category,
             item.totalSum
         )
     }
@@ -128,7 +141,7 @@ object Converter {
             item.retailPlace,
             item.retailPlaceAddress,
             item.user,
-            item.userInn,
+            item.userInn
         )
     }
 
@@ -137,10 +150,5 @@ object Converter {
             GoodEntity(0, 0,it.name, it.price, it.quantity, it.sum)
         }
 
-    private fun toCheckAllInfo(checkItem: CheckItem): CheckAllInfoTuple =
-        CheckAllInfoTuple(
-            toCheckEntity(checkItem),
-            toCheckDetailsEntity(checkItem),
-            toGoodEntityList(checkItem)
-        )
+
 }

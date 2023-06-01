@@ -1,11 +1,15 @@
 package ru.savenkov.paychecksapp.model.repository
 
 import android.util.Log
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.model.network.ProverkachekaApi
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 import ru.savenkov.paychecksapp.model.room.AppDatabase
+import ru.savenkov.paychecksapp.model.room.entities.CategoryEntity
+import ru.savenkov.paychecksapp.presentation.model.Check
 import ru.savenkov.paychecksapp.presentation.model.CheckAll
 import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 import java.io.IOException
@@ -14,18 +18,34 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
     private val dao = db.getPaychecksDao()
     private val api = ProverkachekaApi.create()
 
-    override suspend fun insertCheck(checkItem: CheckItem) {
+    override val checkList: Flow<List<Check>> = dao.getCheckList().map {
+        Converter.toView(it)
+    }
+    override val categoryList: Flow<List<String>> = dao.getCategoryList().map {
+        Converter.categoryToView(it)
+    }
 
-        val entity = Converter.toDatabase(checkItem)
 
+    override suspend fun saveCategory(category: String) {
         try {
+            val entity = CategoryEntity(category)
+            dao.insertCategory(entity)
+        }
+        catch (err: Exception) {
+            Log.e("Room",err.message.toString())
+        }
+    }
+
+    override suspend fun saveCheck(checkItem: CheckItem, category: String?) {
+        try {
+            val entity = Converter.toDatabase(checkItem, category)
             dao.insertAllCheckInfo(entity)
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())
         }
     }
 
-    override suspend fun getAllCheckInfoById(id: Long): CheckAll? {
+    override suspend fun getCheckById(id: Long): CheckAll? {
         var check: CheckAll? = null
         try {
             val checkEntity = dao.getAllCheckInfoById(id)

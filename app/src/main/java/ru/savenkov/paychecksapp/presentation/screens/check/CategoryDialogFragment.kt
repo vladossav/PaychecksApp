@@ -3,12 +3,12 @@ package ru.savenkov.paychecksapp.presentation.screens.check
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.RadioGroup.LayoutParams
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
@@ -19,7 +19,6 @@ import com.google.android.material.radiobutton.MaterialRadioButton
 import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.databinding.DialogFragmentCategoryCheckBinding
-import ru.savenkov.paychecksapp.model.network.data.CheckItem
 
 class CategoryDialogFragment: DialogFragment() {
     private var _binding: DialogFragmentCategoryCheckBinding? = null
@@ -39,37 +38,55 @@ class CategoryDialogFragment: DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DialogFragmentCategoryCheckBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.inputCategory.clearFocus()
 
         viewModel.categoryList.observe(viewLifecycleOwner) { list ->
-            list.forEach {
-                val radioButton = MaterialRadioButton(requireContext())
-                radioButton.text = it.name
-                binding.radioGroup.addView(radioButton, 0)
-            }
+            fillRadioGroup(list)
         }
-        //binding.radioGroup.add
-        binding.chooseButton.setOnClickListener {
-            val id = binding.radioGroup.checkedRadioButtonId
-            if (id == -1) return@setOnClickListener
-            var categoryName = ""
-            categoryName = if (id == R.id.radio_inputText) binding.inputCategory.text.toString()
-            else view.findViewById<MaterialRadioButton>(id).text.toString()
-            //Если categoryName = null вылетает exception
-            Log.d("Category", categoryName)
-            setFragmentResult(
-                CATEGORY_REQUEST_KEY,
-                bundleOf(CheckFragment.CHECK_CATEGORY_KEY to categoryName)
-            )
-            dismiss()
 
+        binding.chooseButton.setOnClickListener {
+            saveRadioCategoryAndExit(view)
         }
+    }
+
+    private fun fillRadioGroup(list: List<String>) {
+        if (binding.radioGroup.childCount >= list.size + 2) return
+        val heightAtDp = (35 * resources.displayMetrics.density).toInt()
+        list.forEach {category ->
+            val radioButton = MaterialRadioButton(requireContext()).apply {
+                layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, heightAtDp)
+                text = category
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+            }
+
+            binding.radioGroup.addView(radioButton, 0)
+        }
+    }
+
+    private fun saveRadioCategoryAndExit(view: View) {
+        val id = binding.radioGroup.checkedRadioButtonId
+        val categoryName: String = when(id) {
+            -1 -> return
+            R.id.radio_no_category -> ""
+            R.id.radio_inputText -> {
+                val inputCategory = binding.inputCategory.text.toString().lowercase()
+                if (inputCategory == "" || inputCategory == " ") return
+                viewModel.saveCategory(inputCategory)
+                inputCategory
+            }
+            else -> view.findViewById<MaterialRadioButton>(id).text.toString()
+        }
+
+        Log.d("Category", categoryName)
+        setFragmentResult(
+            CATEGORY_REQUEST_KEY,
+            bundleOf(CheckFragment.CHECK_CATEGORY_KEY to categoryName)
+        )
+        dismiss()
     }
 
     override fun onStart() {
@@ -77,8 +94,12 @@ class CategoryDialogFragment: DialogFragment() {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
+
     companion object {
-        const val CHECK_ITEM_FROM_API = "CheckItemFromApiToSave"
         const val CATEGORY_REQUEST_KEY = "CATEGORY_REQUEST_KEY"
     }
 }

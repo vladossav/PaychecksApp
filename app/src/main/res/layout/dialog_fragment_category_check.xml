@@ -34,6 +34,7 @@
 
 
             <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_no_category"
                 android:text="Без категории"
                 android:textSize="16sp"
                 android:layout_width="wrap_content"

@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.savenkov.paychecksapp.presentation.util.RecyclerDiffUtil
 import ru.savenkov.paychecksapp.R
-import ru.savenkov.paychecksapp.model.room.entities.GoodEntity
-import ru.savenkov.paychecksapp.presentation.model.Check
+import ru.savenkov.paychecksapp.presentation.model.CheckForAdapter
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
 import ru.savenkov.paychecksapp.presentation.model.CheckInfo
 
 class CheckGoodsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    var checkList: List<Check> = emptyList()
+    var checkList: List<CheckForAdapter> = emptyList()
     set(value) {
         val difResult = DiffUtil.calculateDiff(RecyclerDiffUtil(field, value))
         field = value

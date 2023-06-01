@@ -1,13 +1,10 @@
 package ru.savenkov.paychecksapp.presentation.screens.saved
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 
-class SavedViewModel : ViewModel() {
+class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
+    val checksList = repository.checkList.asLiveData()
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
-    }
-    val text: LiveData<String> = _text
 }

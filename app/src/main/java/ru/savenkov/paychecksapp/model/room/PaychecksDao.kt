@@ -1,6 +1,7 @@
 package ru.savenkov.paychecksapp.model.room
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import ru.savenkov.paychecksapp.model.room.entities.*
 
 
@@ -14,7 +15,7 @@ interface PaychecksDao {
     suspend fun insertCheckDetails(checkDetailsEntity: CheckDetailsEntity)
 
     @Insert
-    suspend fun insertCategory(categoryEntity: CategoryEntity): Long
+    suspend fun insertCategory(categoryEntity: CategoryEntity)
 
     @Insert
     suspend fun insertGoodsList(goodEntity: List<GoodEntity>)
@@ -33,6 +34,12 @@ interface PaychecksDao {
     @Query("SELECT * FROM 'check' c " +
             "WHERE c.id = :checkId")
     fun getCheckById(checkId: Long): CheckEntity
+
+    @Query("SELECT * FROM category")
+    fun getCategoryList(): Flow<List<CategoryEntity>>
+
+    @Query("SELECT * FROM 'check'")
+    fun getCheckList(): Flow<List<CheckEntity>>
 
     @Transaction
     @Query("SELECT * " +

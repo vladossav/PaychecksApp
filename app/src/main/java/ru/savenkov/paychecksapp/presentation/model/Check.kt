@@ -1,3 +1,8 @@
 package ru.savenkov.paychecksapp.presentation.model
 
-interface Check
+data class Check(
+    val id: Long,
+    val dateTime: String,
+    val category: String?,
+    val totalSum: String
+)

@@ -1,13 +1,11 @@
 package ru.savenkov.paychecksapp.presentation.screens.check
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.viewmodel.initializer
@@ -15,9 +13,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
-import ru.savenkov.paychecksapp.data
 import ru.savenkov.paychecksapp.databinding.FragmentCheckBinding
-import ru.savenkov.paychecksapp.presentation.model.Check
+import ru.savenkov.paychecksapp.presentation.model.CheckForAdapter
 
 
 class CheckFragment : Fragment() {
@@ -32,26 +29,21 @@ class CheckFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val qrRaw = requireArguments().getString(QR_RAW_KEY)
-        viewModel.getCheckFromMock()
-        //if (!viewModel.getCheck(qrRaw))
-            Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCheckBinding.inflate(inflater, container, false)
-        
-        setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { key, bundle ->
-            val categoryResult = bundle.getString(CHECK_CATEGORY_KEY)
-            Log.d("Category", categoryResult.toString())
+
+        val qrRaw = requireArguments().getString(QR_RAW_KEY)
+        viewModel.getCheckFromMock()
+        //if (!viewModel.getCheck(qrRaw))
+        Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
+
+        setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
+            viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
         }
-        /*viewModel.insertCheck(data)
-        viewModel.getAllCheckById(1)*/
         return binding.root
     }
 
@@ -63,12 +55,18 @@ class CheckFragment : Fragment() {
             findNavController().popBackStack()
         }
 
-        binding.saveButton.setOnClickListener {
+        binding.categoryButton.setOnClickListener {
             findNavController().navigate(R.id.action_checkFragment_to_categoryDialogFragment)
         }
 
+        binding.saveButton.setOnClickListener {
+            binding.saveButton.text = "Сохранено!"
+            binding.saveButton.isClickable = false
+            viewModel.saveCheck()
+        }
+
         viewModel.checkAll.observe(viewLifecycleOwner) {
-            val list = it.checkGoods as ArrayList<Check>
+            val list = it.checkGoods as ArrayList<CheckForAdapter>
             list.add(0, it.checkInfo)
             list.add(it.checkInfo)
             goodsAdapter.checkList = list
@@ -81,10 +79,8 @@ class CheckFragment : Fragment() {
         super.onDestroyView()
     }
 
-
     companion object {
        const val QR_RAW_KEY = "QR_RAW_KEY"
        const val CHECK_CATEGORY_KEY = "CheckNewCategoryName"
-       
     }
 }
