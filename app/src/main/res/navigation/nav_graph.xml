@@ -10,7 +10,11 @@
         android:id="@+id/navigation_saved"
         android:name="ru.savenkov.paychecksapp.presentation.screens.saved.SavedFragment"
         android:label="@string/title_saved"
-        tools:layout="@layout/fragment_saved" />
+        tools:layout="@layout/fragment_saved" >
+        <action
+            android:id="@+id/action_navigation_saved_to_checkFragment"
+            app:destination="@id/checkFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_scan"

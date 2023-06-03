@@ -81,7 +81,7 @@ object Converter {
         CheckInfo(
             checkAllInfo.check.id,
             checkAllInfo.check.dateTime.replace("T".toRegex()," "),
-            "",
+            checkAllInfo.check.category,
             toRubleToString(checkAllInfo.check.totalSum),
             checkAllInfo.details.requestNumber.toString(),
             getOperationFromCode(checkAllInfo.details.operationType),

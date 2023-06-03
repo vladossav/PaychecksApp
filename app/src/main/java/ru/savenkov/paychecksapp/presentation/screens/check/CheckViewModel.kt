@@ -43,7 +43,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     }
 
 
-    fun getAllCheckById(id: Long) = viewModelScope.launch(Dispatchers.IO) {
+    fun getCheckById(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         val check = repository.getCheckById(id)
         checkAll.postValue(check!!)
     }

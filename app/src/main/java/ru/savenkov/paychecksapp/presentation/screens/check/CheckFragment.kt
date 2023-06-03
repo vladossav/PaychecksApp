@@ -1,6 +1,7 @@
 package ru.savenkov.paychecksapp.presentation.screens.check
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,6 +30,10 @@ class CheckFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,10 +41,19 @@ class CheckFragment : Fragment() {
     ): View {
         _binding = FragmentCheckBinding.inflate(inflater, container, false)
 
-        val qrRaw = requireArguments().getString(QR_RAW_KEY)
-        viewModel.getCheckFromMock()
-        //if (!viewModel.getCheck(qrRaw))
-        Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
+        if (arguments?.containsKey(QR_RAW_KEY) == true) {
+            val qrRaw = requireArguments().getString(QR_RAW_KEY)
+            if (qrRaw == "mock") viewModel.getCheckFromMock()
+            if (!viewModel.getCheck(qrRaw))
+                Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
+            Log.d("CheckFragment", qrRaw.toString())
+        }
+
+        if (arguments?.containsKey(CHECK_ID_KEY) == true) {
+            val checkId = requireArguments().getLong(CHECK_ID_KEY)
+            viewModel.getCheckById(checkId)
+            Log.d("CheckFragment", checkId.toString())
+        }
 
         setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
             viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
@@ -82,5 +96,6 @@ class CheckFragment : Fragment() {
     companion object {
        const val QR_RAW_KEY = "QR_RAW_KEY"
        const val CHECK_CATEGORY_KEY = "CheckNewCategoryName"
+       const val CHECK_ID_KEY = "CHECK_ID_KEY"
     }
 }

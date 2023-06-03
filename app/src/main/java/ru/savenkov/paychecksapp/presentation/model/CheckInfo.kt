@@ -3,7 +3,7 @@ package ru.savenkov.paychecksapp.presentation.model
 data class CheckInfo(
     val id: Long,
     val dateTime: String,
-    val category: String,
+    val category: String?,
     val totalSum: String, //руб
 
     val requestNumber: String, //номер чека

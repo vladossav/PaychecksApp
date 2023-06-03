@@ -9,7 +9,7 @@ data class CheckAllInfoTuple(
     val check: CheckEntity,
     @Relation(
         parentColumn = "id",
-        entityColumn = "checkId",
+        entityColumn = "checkId"
     )
     val details: CheckDetailsEntity,
     @Relation(

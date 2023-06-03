@@ -39,12 +39,15 @@ interface PaychecksDao {
     fun getCategoryList(): Flow<List<CategoryEntity>>
 
     @Query("SELECT * FROM 'check'")
-    fun getCheckList(): Flow<List<CheckEntity>>
+    suspend fun getCheckList(): List<CheckEntity>
+
+    @Query("SELECT * FROM 'check' c WHERE c.category = :category")
+    suspend fun getCheckListWithCategory(category: String): List<CheckEntity>
 
     @Transaction
     @Query("SELECT * " +
-    "FROM 'check' c, check_details cd, goods g " +
-    "WHERE c.id = cd.checkId AND c.id = g.checkId AND c.id = :id")
+    "FROM 'check' c " +
+    "WHERE c.id = :id")
     suspend fun getAllCheckInfoById(id: Long): CheckAllInfoTuple
    /* @Query("SELECT bin_number FROM recent ORDER BY last_visit DESC")
     fun getRecentList(): Flow<MutableList<String>>*/

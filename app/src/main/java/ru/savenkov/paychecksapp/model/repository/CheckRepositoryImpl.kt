@@ -1,8 +1,10 @@
 package ru.savenkov.paychecksapp.model.repository
 
 import android.util.Log
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toList
 import retrofit2.HttpException
 import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.model.network.ProverkachekaApi
@@ -18,13 +20,22 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
     private val dao = db.getPaychecksDao()
     private val api = ProverkachekaApi.create()
 
-    override val checkList: Flow<List<Check>> = dao.getCheckList().map {
-        Converter.toView(it)
-    }
     override val categoryList: Flow<List<String>> = dao.getCategoryList().map {
         Converter.categoryToView(it)
     }
 
+    override suspend fun getCheckWithCategory(category: String): List<Check>  {
+        Log.d("Room", "getCheckWithCategory")
+        val listEntity = dao.getCheckListWithCategory(category)
+        val list = Converter.toView(listEntity)
+        return list
+    }
+
+    override suspend fun getCheckList(): List<Check> {
+        val listEntity = dao.getCheckList()
+        val list = Converter.toView(listEntity)
+        return list
+    }
 
     override suspend fun saveCategory(category: String) {
         try {
