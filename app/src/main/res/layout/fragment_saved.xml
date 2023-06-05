@@ -35,6 +35,16 @@
         android:layout_marginTop="10dp"
         />
 
+    <com.google.android.material.chip.Chip
+        android:visibility="gone"
+        android:id="@+id/selected_category"
+        app:layout_constraintTop_toBottomOf="@id/categories_holder"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="10dp"
+        app:closeIconEnabled="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <LinearLayout
         android:id="@+id/sort_panel"
         android:orientation="horizontal"
@@ -42,7 +52,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categories_holder"/>
+        app:layout_constraintTop_toBottomOf="@id/selected_category"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/saved_holder"

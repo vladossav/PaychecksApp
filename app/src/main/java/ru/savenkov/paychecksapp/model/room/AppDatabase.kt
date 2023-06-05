@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import ru.savenkov.paychecksapp.model.room.dao.PaychecksDao
 import ru.savenkov.paychecksapp.model.room.entities.CategoryEntity
 import ru.savenkov.paychecksapp.model.room.entities.CheckDetailsEntity
 import ru.savenkov.paychecksapp.model.room.entities.CheckEntity
@@ -27,8 +28,7 @@ abstract class AppDatabase: RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "paychecks"
-                )//.createFromAsset("paychecks.db")
-                    .fallbackToDestructiveMigration().build()
+                ).fallbackToDestructiveMigration().build()
 
                 INSTANCE = instance
                 instance

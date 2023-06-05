@@ -21,4 +21,4 @@ data class CheckInfo(
     val retailPlaceAddress: String, //Адрес магазина
     val user: String, //Организация
     val userInn: String //ИНН Организации
-    ) : CheckForAdapter
+    ) : CheckAdapterItem

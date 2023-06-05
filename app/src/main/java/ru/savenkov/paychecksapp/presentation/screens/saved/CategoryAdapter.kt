@@ -5,11 +5,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.presentation.util.RecyclerDiffUtil
 
 class CategoryAdapter(private val onClick: (String) -> Unit): RecyclerView.Adapter<CategoryViewHolder>() {
-    var categoryList: List<String> = emptyList()
+    var categoryList: ArrayList<String> = arrayListOf()
         set(value) {
             val difResult = DiffUtil.calculateDiff(RecyclerDiffUtil(field, value))
             field = value
@@ -19,8 +20,9 @@ class CategoryAdapter(private val onClick: (String) -> Unit): RecyclerView.Adapt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder =
         CategoryViewHolder(parent, onClick)
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         holder.onBind(categoryList[position])
+    }
 
     override fun getItemCount(): Int = categoryList.size
 }
@@ -30,8 +32,9 @@ class CategoryViewHolder(parent: ViewGroup, private val onClick: (String) -> Uni
 )  {
 
     fun onBind(item: String) {
-        itemView.findViewById<TextView>(R.id.category_text).text = item
-        itemView.setOnClickListener {
+        val chipItem = itemView.findViewById<Chip>(R.id.category_text)
+        chipItem.text = item
+        chipItem.setOnClickListener {
             onClick.invoke(item)
         }
     }

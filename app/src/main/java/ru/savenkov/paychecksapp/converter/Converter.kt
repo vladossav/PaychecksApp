@@ -2,10 +2,7 @@ package ru.savenkov.paychecksapp.converter
 
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 import ru.savenkov.paychecksapp.model.room.entities.*
-import ru.savenkov.paychecksapp.presentation.model.Check
-import ru.savenkov.paychecksapp.presentation.model.CheckAll
-import ru.savenkov.paychecksapp.presentation.model.CheckGood
-import ru.savenkov.paychecksapp.presentation.model.CheckInfo
+import ru.savenkov.paychecksapp.presentation.model.*
 
 object Converter {
 
@@ -25,6 +22,13 @@ object Converter {
             toRubleToString(check.totalSum)
         )
     }
+
+    fun toCategoryCountList(checkAmount: Int, goodsAmount: Int, categoryCountList: List<CategoryCountTuple>): StatisticsItem =
+        StatisticsItem(
+            checkAmount,
+            goodsAmount,
+            categoryCountList.associate { it.category to it.count }
+        )
 
     fun categoryToView(categoryEntityList: List<CategoryEntity>): List<String> =
         categoryEntityList.map { it.name }
@@ -67,6 +71,17 @@ object Converter {
     }
 
     fun goodsToView(checkAllInfoTuple: CheckAllInfoTuple): List<CheckGood> = checkAllInfoTuple.goods.map {
+        CheckGood(
+            it.checkId,
+            it.id,
+            it.name,
+            toRubleToString(it.price),
+            it.quantity.toString(),
+            toRubleToString(it.sum)
+        )
+    }
+
+    fun goodsToView(checkGoods: List<GoodEntity>): List<CheckGood> = checkGoods.map {
         CheckGood(
             it.checkId,
             it.id,
@@ -149,6 +164,4 @@ object Converter {
         checkItem.data.jsonObj.items.map {
             GoodEntity(0, 0,it.name, it.price, it.quantity, it.sum)
         }
-
-
 }

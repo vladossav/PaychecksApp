@@ -1,18 +1,18 @@
 package ru.savenkov.paychecksapp.model.repository
 
 import android.util.Log
-import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import retrofit2.HttpException
 import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.model.network.ProverkachekaApi
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 import ru.savenkov.paychecksapp.model.room.AppDatabase
 import ru.savenkov.paychecksapp.model.room.entities.CategoryEntity
+import ru.savenkov.paychecksapp.presentation.model.StatisticsItem
 import ru.savenkov.paychecksapp.presentation.model.Check
 import ru.savenkov.paychecksapp.presentation.model.CheckAll
+import ru.savenkov.paychecksapp.presentation.model.CheckGood
 import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 import java.io.IOException
 
@@ -26,7 +26,7 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
 
     override suspend fun getCheckWithCategory(category: String): List<Check>  {
         Log.d("Room", "getCheckWithCategory")
-        val listEntity = dao.getCheckListWithCategory(category)
+        val listEntity = dao.getCheckWithCategoryList(category)
         val list = Converter.toView(listEntity)
         return list
     }
@@ -47,6 +47,18 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         }
     }
 
+    override suspend fun getAllGoodsListByDesc(): List<CheckGood> {
+        val listEntity = dao.getAllGoodsListByDesc()
+        val list = Converter.goodsToView(listEntity)
+        return list
+    }
+
+    override suspend fun getAllGoodsListByAsc(): List<CheckGood> {
+        val listEntity = dao.getAllGoodsListByAsc()
+        val list = Converter.goodsToView(listEntity)
+        return list
+    }
+
     override suspend fun saveCheck(checkItem: CheckItem, category: String?) {
         try {
             val entity = Converter.toDatabase(checkItem, category)
@@ -54,6 +66,13 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())
         }
+    }
+
+    override suspend fun getStatisticsItem(): StatisticsItem {
+        val listEntity = dao.getCategoryCountList()
+        val checkAmount = dao.getCheckCount()
+        val goodsAmount = dao.getGoodsCount()
+        return Converter.toCategoryCountList(checkAmount, goodsAmount, listEntity)
     }
 
     override suspend fun getCheckById(id: Long): CheckAll? {

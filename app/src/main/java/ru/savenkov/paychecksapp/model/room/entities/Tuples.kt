@@ -1,5 +1,6 @@
 package ru.savenkov.paychecksapp.model.room.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Relation
 
@@ -17,5 +18,10 @@ data class CheckAllInfoTuple(
         entityColumn = "checkId"
     )
     val goods: List<GoodEntity>
+)
+
+data class CategoryCountTuple(
+    @ColumnInfo("name") val category: String,
+    val count: Int
 )
 

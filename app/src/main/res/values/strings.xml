@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">PaychecksApp</string>
-    <string name="title_scan">Scan</string>
-    <string name="title_saved">Saved</string>
-    <string name="title_statistics">Statistics</string>
+    <string name="title_scan">Скан</string>
+    <string name="title_saved">Чеки</string>
+    <string name="title_statistics">Статистика</string>
 
     <string name="check_shop_userInn">ИНН</string>
     <string name="check_number">Чек №</string>
@@ -25,6 +25,12 @@
     <string name="check_dialog_new_category_title">Выберите категорию чека</string>
     <string name="check_dialog_new_category_radio_edit_text">Новая категория</string>
     <string name="check_dialog_new_category_choice_button">Выбрать</string>
+
+    <string name="statistics_title">Статистика</string>
+    <string name="statistics_total_checks">чеков</string>
+    <string name="statistics_total_goods">товаров</string>
+    <string name="statistics_sort_goods_by_asc_price">По возрастанию цены</string>
+    <string name="statistics_sort_goods_by_desc_price">По убыванию цены</string>
 
 
 </resources>

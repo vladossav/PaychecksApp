@@ -12,10 +12,11 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.databinding.FragmentCheckBinding
-import ru.savenkov.paychecksapp.presentation.model.CheckForAdapter
+import ru.savenkov.paychecksapp.presentation.model.CheckAdapterItem
 
 
 class CheckFragment : Fragment() {
@@ -80,7 +81,7 @@ class CheckFragment : Fragment() {
         }
 
         viewModel.checkAll.observe(viewLifecycleOwner) {
-            val list = it.checkGoods as ArrayList<CheckForAdapter>
+            val list = it.checkGoods as ArrayList<CheckAdapterItem>
             list.add(0, it.checkInfo)
             list.add(it.checkInfo)
             goodsAdapter.checkList = list

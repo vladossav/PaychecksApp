@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,10 @@ class SavedFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (savedInstanceState == null) viewModel.getCheckList()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,18 +51,28 @@ class SavedFragment : Fragment() {
         }
         val categoryAdapter = CategoryAdapter {category ->
             viewModel.getChecksWithCategory(category)
+            viewModel.selectedCategory.value = category
         }
+
+        viewModel.selectedCategory.observe(viewLifecycleOwner) {
+            binding.selectedCategory.isVisible = true
+            binding.selectedCategory.text = it
+        }
+
         binding.savedHolder.adapter = savedChecksAdapter
         binding.categoriesHolder.adapter = categoryAdapter
+        binding.selectedCategory.setOnCloseIconClickListener {
+            viewModel.getCheckList()
+            it.isVisible = false
+        }
 
-        if (savedInstanceState == null) viewModel.getCheckList()
 
         viewModel.checksList.observe(viewLifecycleOwner) {
             savedChecksAdapter.checkList = it
         }
 
         viewModel.categoryList.observe(viewLifecycleOwner) {
-            categoryAdapter.categoryList = it
+            categoryAdapter.categoryList = it as ArrayList<String>
         }
 
         return binding.root

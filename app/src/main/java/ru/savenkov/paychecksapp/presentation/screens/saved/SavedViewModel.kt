@@ -12,6 +12,7 @@ import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
     var checksList = MutableLiveData<List<Check>>()
     val categoryList = repository.categoryList.asLiveData()
+    val selectedCategory = MutableLiveData<String>()
 
     fun getChecksWithCategory(category: String) = viewModelScope.launch(Dispatchers.IO) {
         val list = repository.getCheckWithCategory(category)
