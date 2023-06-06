@@ -24,6 +24,14 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         Converter.categoryToView(it)
     }
 
+    override suspend fun removeCheckById(id: Long) {
+        try {
+            dao.removeCheckById(id)
+        } catch (err: Exception) {
+            Log.e("Room",err.message.toString())
+        }
+    }
+
     override suspend fun getCheckWithCategory(category: String): List<Check>  {
         Log.d("Room", "getCheckWithCategory")
         val listEntity = dao.getCheckWithCategoryList(category)
@@ -63,10 +71,10 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         return Converter.goodsToView(listEntity)
     }
 
-    override suspend fun saveCheck(checkItem: CheckItem, category: String?) {
+    override suspend fun saveCheck(checkItem: CheckItem, name: String, category: String?) {
         try {
             if(category != null) saveCategory(category)
-            val entity = Converter.toDatabase(checkItem, category)
+            val entity = Converter.toDatabase(checkItem, name, category)
             dao.insertAllCheckInfo(entity)
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())

@@ -32,11 +32,6 @@ class SavedFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) viewModel.getCheckList()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,6 +72,11 @@ class SavedFragment : Fragment() {
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.getCheckList()
+    }
+
     private fun setSorting() {
         binding.sortDate.setOnClickListener {
             PopupMenu(requireContext(), it).apply {
@@ -99,7 +99,6 @@ class SavedFragment : Fragment() {
             val popUpMenu = PopupMenu(requireContext(), it)
             val dialog = Dialog(requireContext())
             dialog.setContentView(R.layout.saved_sum_slider)
-
             dialog.show()
         }
 

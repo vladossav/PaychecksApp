@@ -1,23 +1,27 @@
 package ru.savenkov.paychecksapp.presentation.screens.check
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.databinding.FragmentCheckBinding
 import ru.savenkov.paychecksapp.presentation.model.CheckAdapterItem
+import ru.savenkov.paychecksapp.presentation.screens.saved.SavedFragment
 
 
 class CheckFragment : Fragment() {
@@ -35,6 +39,7 @@ class CheckFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments?.containsKey(QR_RAW_KEY) == true) {
+            viewModel.state.value = State.NOT_SAVED
             val qrRaw = requireArguments().getString(QR_RAW_KEY)
             if (qrRaw == "mock") viewModel.getCheckFromMock()
             /*if (!viewModel.getCheck(qrRaw))
@@ -43,6 +48,7 @@ class CheckFragment : Fragment() {
         }
 
         if (arguments?.containsKey(CHECK_ID_KEY) == true) {
+            viewModel.state.value = State.SAVED
             val checkId = requireArguments().getLong(CHECK_ID_KEY)
             viewModel.getCheckById(checkId)
             Log.d("CheckFragment", checkId.toString())
@@ -50,6 +56,9 @@ class CheckFragment : Fragment() {
 
         setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
             viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
+            if (viewModel.state.value == State.SAVED) {
+                viewModel.updateCheckCategory()
+            }
             Log.d("Category", "CheckFragmentResult: " + viewModel.checkCategory.value)
         }
     }
@@ -62,9 +71,10 @@ class CheckFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val goodsAdapter = CheckGoodsAdapter()
-        binding.goodsHolder.adapter = goodsAdapter
+        binding.checkHolder.adapter = goodsAdapter
 
         binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
@@ -75,11 +85,24 @@ class CheckFragment : Fragment() {
             bundleOf(CHECK_CATEGORY_KEY to viewModel.checkCategory.value))
         }
 
-        binding.saveButton.setOnClickListener {
-            binding.saveButton.text = "Сохранено!"
-            binding.saveButton.isClickable = false
-            viewModel.saveCheck()
+        binding.saveDeleteButton.setOnClickListener {
+            viewModel.makeSaveDeleteAction()
         }
+
+        viewModel.checkName.observe(viewLifecycleOwner) {
+            binding.checkName.setText(it, TextView.BufferType.EDITABLE)
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) {state->
+            if (state == State.SAVED) {
+                binding.saveDeleteButton.text = resources.getString(R.string.check_delete_button)
+            }
+            else {
+                binding.saveDeleteButton.text = resources.getString(R.string.check_save_button)
+            }
+        }
+
+        setCheckEditNameSettings()
 
         viewModel.checkAll.observe(viewLifecycleOwner) {
             val list = it.checkGoods as ArrayList<CheckAdapterItem>
@@ -89,6 +112,35 @@ class CheckFragment : Fragment() {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setCheckEditNameSettings() {
+        binding.checkHolder.setOnTouchListener { _, _ ->
+            if (activity?.currentFocus != null) {
+                val inputManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(
+                    activity?.currentFocus?.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
+            }
+            binding.checkName.isEnabled = false
+            binding.checkName.clearFocus()
+            false
+        }
+
+        binding.checkName.setOnFocusChangeListener { _, _ ->
+            viewModel.checkName.value = binding.checkName.text.toString()
+            Log.d("CheckFragment", binding.checkName.text.toString())
+            if (viewModel.state.value == State.SAVED) {
+                viewModel.updateCheckName()
+            }
+        }
+
+        binding.editButton.setOnClickListener {
+            binding.checkName.isEnabled = true
+            binding.checkName.requestFocus()
+        }
+    }
 
     override fun onDestroyView() {
         _binding = null

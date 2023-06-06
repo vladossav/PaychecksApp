@@ -4,15 +4,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     tools:context=".presentation.screens.check.CheckFragment">
 
+    <EditText
+        android:id="@+id/checkName"
+        android:enabled="false"
+        android:textColor="@color/text_color"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/editButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.chip.Chip
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        android:id="@+id/editButton"
+        app:chipEndPadding="-12dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:chipBackgroundColor="@color/main_dark_blue"
+        app:iconEndPadding="2dp"
+        app:chipIcon="@drawable/ic_edit_32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/goods_holder"
+        android:id="@+id/check_holder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkName"
         app:layout_constraintBottom_toTopOf="@id/close_button"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
@@ -24,7 +50,7 @@
         android:layout_height="40dp"
         android:textAllCaps="false"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/goods_holder"
+        app:layout_constraintTop_toBottomOf="@id/check_holder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/category_button"
@@ -37,18 +63,18 @@
         android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/goods_holder"
+        app:layout_constraintTop_toBottomOf="@id/check_holder"
         android:background="@drawable/add_category"
         />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/save_button"
+        android:id="@+id/save_delete_button"
         android:text="@string/check_save_button"
         android:layout_width="115dp"
         android:layout_height="40dp"
         android:textAllCaps="false"
         android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/goods_holder"
+        app:layout_constraintTop_toBottomOf="@id/check_holder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/category_button"
         app:layout_constraintEnd_toEndOf="parent"

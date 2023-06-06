@@ -33,7 +33,8 @@ class SavedCheckViewHolder(parent: ViewGroup, private val onClick: (Long) -> Uni
 
     fun bind(number: Int, check: Check) {
         val num = adapterPosition + 1
-        itemView.findViewById<TextView>(R.id.name).text = num.toString()
+        itemView.findViewById<TextView>(R.id.number).text = num.toString()
+        itemView.findViewById<TextView>(R.id.name).text = check.name
         itemView.findViewById<TextView>(R.id.date_time).text = check.dateTime
         itemView.findViewById<TextView>(R.id.category).text = check.category
         itemView.findViewById<TextView>(R.id.total_sum).text = check.totalSum

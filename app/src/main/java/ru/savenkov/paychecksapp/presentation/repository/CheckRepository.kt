@@ -10,7 +10,8 @@ import ru.savenkov.paychecksapp.presentation.model.CheckGood
 interface CheckRepository {
     suspend fun getCheckById(id: Long): CheckAll?
     suspend fun getCheckFromApi(qrRaw: String): CheckItem?
-    suspend fun saveCheck(checkItem: CheckItem, category: String?)
+    suspend fun saveCheck(checkItem: CheckItem, name: String, category: String?)
+    suspend fun removeCheckById(id: Long)
 
     //saved
     suspend fun getCheckWithCategory(category: String): List<Check>

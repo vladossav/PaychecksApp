@@ -7,9 +7,9 @@ import ru.savenkov.paychecksapp.presentation.model.*
 object Converter {
 
 
-    fun toDatabase(checkItem: CheckItem, category: String? = ""): CheckAllInfoTuple =
+    fun toDatabase(checkItem: CheckItem, name: String,category: String? = ""): CheckAllInfoTuple =
         CheckAllInfoTuple(
-            toCheckEntity(checkItem, category),
+            toCheckEntity(checkItem,name, category),
             toCheckDetailsEntity(checkItem),
             toGoodEntityList(checkItem)
         )
@@ -17,6 +17,7 @@ object Converter {
     fun toView(checksEntityList: List<CheckEntity>): List<Check> = checksEntityList.map { check ->
         Check(
             check.id,
+            check.name,
             check.dateTime,
             check.category,
             toRubleToString(check.totalSum)
@@ -33,7 +34,7 @@ object Converter {
     fun categoryToView(categoryEntityList: List<CategoryEntity>): List<String> =
         categoryEntityList.map { it.name }
 
-    fun fullCheckToView(checkItem: CheckItem):CheckAll {
+    fun fullCheckToView(checkItem: CheckItem): CheckAll {
         val goodsList = checkItem.data.jsonObj.items.map {
             CheckGood(
                 0,
@@ -47,6 +48,7 @@ object Converter {
         val item = checkItem.data.jsonObj
         val checkDetails = CheckInfo(
             0,
+            " ",
             item.dateTime.replace("T".toRegex()," "),
             "",
             toRubleToString(item.totalSum),
@@ -95,6 +97,7 @@ object Converter {
     fun checkInfoToView(checkAllInfo: CheckAllInfoTuple): CheckInfo =
         CheckInfo(
             checkAllInfo.check.id,
+            checkAllInfo.check.name,
             checkAllInfo.check.dateTime.replace("T".toRegex()," "),
             checkAllInfo.check.category,
             toRubleToString(checkAllInfo.check.totalSum),
@@ -129,10 +132,11 @@ object Converter {
             else -> ""
         }
 
-    private fun toCheckEntity(checkItem: CheckItem, category: String?): CheckEntity {
+    private fun toCheckEntity(checkItem: CheckItem, name: String,category: String?): CheckEntity {
         val item = checkItem.data.jsonObj
         return CheckEntity(
             0,
+            name,
             item.dateTime,
             category,
             item.totalSum

@@ -11,6 +11,9 @@ interface PaychecksDao {
     @Insert
     suspend fun insertCheck(checkEntity: CheckEntity): Long
 
+    @Query("DELETE FROM 'check' WHERE id=:id")
+    suspend fun removeCheckById(id: Long)
+
     @Insert
     suspend fun insertCheckDetails(checkDetailsEntity: CheckDetailsEntity)
 

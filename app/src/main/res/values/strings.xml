@@ -21,6 +21,7 @@
     <string name="check_fpd">ФПД:</string>
     <string name="check_close_button">Закрыть</string>
     <string name="check_save_button">Сохранить</string>
+    <string name="check_delete_button">Удалить</string>
 
     <string name="check_dialog_new_category_title">Выберите категорию чека</string>
     <string name="check_dialog_new_category_radio_edit_text">Новая категория</string>
