@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.viewmodel.initializer
@@ -33,20 +34,11 @@ class CheckFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCheckBinding.inflate(inflater, container, false)
-
         if (arguments?.containsKey(QR_RAW_KEY) == true) {
             val qrRaw = requireArguments().getString(QR_RAW_KEY)
             if (qrRaw == "mock") viewModel.getCheckFromMock()
-            if (!viewModel.getCheck(qrRaw))
-                Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
+            /*if (!viewModel.getCheck(qrRaw))
+                Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()*/
             Log.d("CheckFragment", qrRaw.toString())
         }
 
@@ -58,7 +50,15 @@ class CheckFragment : Fragment() {
 
         setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
             viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
+            Log.d("Category", "CheckFragmentResult: " + viewModel.checkCategory.value)
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCheckBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -71,7 +71,8 @@ class CheckFragment : Fragment() {
         }
 
         binding.categoryButton.setOnClickListener {
-            findNavController().navigate(R.id.action_checkFragment_to_categoryDialogFragment)
+            findNavController().navigate(R.id.action_checkFragment_to_categoryDialogFragment,
+            bundleOf(CHECK_CATEGORY_KEY to viewModel.checkCategory.value))
         }
 
         binding.saveButton.setOnClickListener {

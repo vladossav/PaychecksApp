@@ -23,7 +23,7 @@ data class CheckDetailsEntity(
     val shiftNumber: Int, //Смена
     val fiscalDocumentNumber: Int, //ФД
     val fiscalDriveNumber: String, //ФН
-    val fiscalSign: Int, //ФП
+    val fiscalSign: String, //ФП
     val kktRegId: String, //Рег № ККТ
     val numberKkt: String, //ЗН ККТ
 

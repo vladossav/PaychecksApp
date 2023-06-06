@@ -11,8 +11,11 @@ interface CheckRepository {
     suspend fun getCheckById(id: Long): CheckAll?
     suspend fun getCheckFromApi(qrRaw: String): CheckItem?
     suspend fun saveCheck(checkItem: CheckItem, category: String?)
+
+    //saved
     suspend fun getCheckWithCategory(category: String): List<Check>
     suspend fun getCheckList(): List<Check>
+    suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<Check>
 
     val categoryList: Flow<List<String>>
     suspend fun saveCategory(category: String)

@@ -7,6 +7,7 @@
 
     <TextView
         android:id="@+id/goodNumber"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,6 +17,7 @@
 
     <TextView
         android:id="@+id/goodName"
+        android:textColor="@color/text_color"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,6 +28,7 @@
 
     <TextView
         android:id="@+id/goodPrice"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

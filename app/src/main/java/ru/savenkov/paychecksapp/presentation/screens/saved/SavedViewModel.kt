@@ -8,11 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.savenkov.paychecksapp.presentation.model.Check
 import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
     var checksList = MutableLiveData<List<Check>>()
     val categoryList = repository.categoryList.asLiveData()
-    val selectedCategory = MutableLiveData<String>()
 
     fun getChecksWithCategory(category: String) = viewModelScope.launch(Dispatchers.IO) {
         val list = repository.getCheckWithCategory(category)
@@ -22,6 +23,18 @@ class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
     fun getCheckList() = viewModelScope.launch(Dispatchers.IO) {
         val list = repository.getCheckList()
         checksList.postValue(list)
+    }
+
+    fun getCheckListByPeriod(startDate: String, endDate: String) = viewModelScope.launch(Dispatchers.IO) {
+        val list = repository.getCheckListByPeriod(startDate, endDate)
+        checksList.postValue(list)
+    }
+
+    fun convertTimeToDate(time: Long): String {
+        val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        utc.timeInMillis = time
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return format.format(utc.time)
     }
 
 }

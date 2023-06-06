@@ -32,7 +32,7 @@ class SavedCheckViewHolder(parent: ViewGroup, private val onClick: (Long) -> Uni
 ) {
 
     fun bind(number: Int, check: Check) {
-        val num = number + 1
+        val num = adapterPosition + 1
         itemView.findViewById<TextView>(R.id.name).text = num.toString()
         itemView.findViewById<TextView>(R.id.date_time).text = check.dateTime
         itemView.findViewById<TextView>(R.id.category).text = check.category

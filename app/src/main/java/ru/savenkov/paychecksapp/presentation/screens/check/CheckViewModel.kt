@@ -14,7 +14,7 @@ import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 
 class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     val checkAll = MutableLiveData<CheckAll>()
-    val checkCategory = MutableLiveData<String>(null)
+    val checkCategory = MutableLiveData<String?>(null)
     private val checkAllFromApi = MutableLiveData<CheckItem>()
 
     fun saveCheck() = viewModelScope.launch(Dispatchers.IO) {
@@ -46,6 +46,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     fun getCheckById(id: Long) = viewModelScope.launch(Dispatchers.IO) {
         val check = repository.getCheckById(id)
         checkAll.postValue(check!!)
+        checkCategory.postValue(check.checkInfo.category)
     }
 
 }

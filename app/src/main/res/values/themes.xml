@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.PaychecksApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/main_dark_blue</item>
+        <item name="colorPrimaryVariant">@color/main_blue</item>
         <item name="colorOnPrimary">@color/white</item>
 
         <item name="android:statusBarColor">@color/dark_white</item>
@@ -12,4 +12,9 @@
         <item name="android:layout_height">35dp</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="ThemeMaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="android:windowFullscreen">false</item>
+    </style>
+
 </resources>

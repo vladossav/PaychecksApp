@@ -55,6 +55,11 @@ class CategoryDialogFragment: DialogFragment() {
 
     private fun fillRadioGroup(list: List<String>) {
         if (binding.radioGroup.childCount >= list.size + 2) return
+        var savedCategory: String? = null
+        if (arguments?.containsKey(CheckFragment.CHECK_CATEGORY_KEY) == true) {
+            savedCategory = requireArguments().getString(CheckFragment.CHECK_CATEGORY_KEY)
+        }
+
         val heightAtDp = (35 * resources.displayMetrics.density).toInt()
         list.forEach {category ->
             val radioButton = MaterialRadioButton(requireContext()).apply {
@@ -62,26 +67,26 @@ class CategoryDialogFragment: DialogFragment() {
                 text = category
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
             }
-
             binding.radioGroup.addView(radioButton, 0)
+            if (category == savedCategory) binding.radioGroup.check(radioButton.id)
         }
+        if (savedCategory == null) binding.radioGroup.check(R.id.radio_no_category)
     }
 
     private fun saveRadioCategoryAndExit(view: View) {
         val id = binding.radioGroup.checkedRadioButtonId
-        val categoryName: String = when(id) {
-            -1 -> return
-            R.id.radio_no_category -> ""
+        val categoryName: String? = when(id) {
+            -1 -> null
+            R.id.radio_no_category -> null
             R.id.radio_inputText -> {
                 val inputCategory = binding.inputCategory.text.toString().lowercase()
                 if (inputCategory == "" || inputCategory == " ") return
-                viewModel.saveCategory(inputCategory)
                 inputCategory
             }
             else -> view.findViewById<MaterialRadioButton>(id).text.toString()
         }
 
-        Log.d("Category", categoryName)
+        Log.d("Category", categoryName.toString())
         setFragmentResult(
             CATEGORY_REQUEST_KEY,
             bundleOf(CheckFragment.CHECK_CATEGORY_KEY to categoryName)

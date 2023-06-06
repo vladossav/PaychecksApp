@@ -8,8 +8,8 @@ import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 class CategoryDialogFragmentViewModel(private val repository: CheckRepository): ViewModel() {
     val categoryList = repository.categoryList.asLiveData()
 
-    fun saveCategory(category: String) = viewModelScope.launch(Dispatchers.IO) {
+    /*fun saveCategory(category: String) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveCategory(category)
-    }
+    }*/
 
 }

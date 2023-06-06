@@ -7,6 +7,9 @@
 
     <TextView
         android:id="@+id/shopUser"
+        android:layout_marginHorizontal="5dp"
+        android:gravity="center"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -17,6 +20,7 @@
 
     <TextView
         android:id="@+id/shopName"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/shopUser"
@@ -26,6 +30,7 @@
 
     <TextView
         android:id="@+id/shopAddress"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/shopName"
@@ -35,6 +40,7 @@
 
     <TextView
         android:id="@+id/shopUserInn"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/shopAddress"
@@ -44,6 +50,7 @@
 
     <TextView
         android:id="@+id/dateTime"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -54,6 +61,7 @@
 
     <TextView
         android:id="@+id/checkNumber"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/dateTime"
@@ -63,6 +71,7 @@
 
     <TextView
         android:id="@+id/checkShiftNumber"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/checkNumber"
@@ -72,6 +81,7 @@
 
     <TextView
         android:id="@+id/checkType"
+        android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/checkShiftNumber"

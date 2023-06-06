@@ -83,7 +83,7 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
         val sortButton = itemView.findViewById<Chip>(R.id.sort_button)
         sortButton.setOnClickListener {
             val popUpMenu = PopupMenu(parent.context, it)
-            popUpMenu.menuInflater.inflate(R.menu.menu_popup, popUpMenu.menu)
+            popUpMenu.menuInflater.inflate(R.menu.statistics_sort_menu_popup, popUpMenu.menu)
             popUpMenu.setOnMenuItemClickListener { item ->
                 sortButton.text = item.title.toString()
                 when(item.itemId) {
@@ -118,7 +118,7 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
             setEntryLabelColor(Color.WHITE)
             setEntryLabelTextSize(12f)
             highlightValues(null)
-            setUsePercentValues(false)
+            setUsePercentValues(true)
             invalidate()
         }
 

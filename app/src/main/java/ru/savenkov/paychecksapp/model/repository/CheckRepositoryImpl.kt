@@ -33,8 +33,12 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
 
     override suspend fun getCheckList(): List<Check> {
         val listEntity = dao.getCheckList()
-        val list = Converter.toView(listEntity)
-        return list
+        return Converter.toView(listEntity)
+    }
+
+    override suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<Check> {
+        val listEntity = dao.getCheckListByPeriod(startDate, endDate)
+        return Converter.toView(listEntity)
     }
 
     override suspend fun saveCategory(category: String) {
@@ -53,14 +57,15 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         return list
     }
 
+
     override suspend fun getAllGoodsListByAsc(): List<CheckGood> {
         val listEntity = dao.getAllGoodsListByAsc()
-        val list = Converter.goodsToView(listEntity)
-        return list
+        return Converter.goodsToView(listEntity)
     }
 
     override suspend fun saveCheck(checkItem: CheckItem, category: String?) {
         try {
+            if(category != null) saveCategory(category)
             val entity = Converter.toDatabase(checkItem, category)
             dao.insertAllCheckInfo(entity)
         } catch (err: Exception) {

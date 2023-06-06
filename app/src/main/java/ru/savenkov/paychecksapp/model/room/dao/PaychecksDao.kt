@@ -14,7 +14,7 @@ interface PaychecksDao {
     @Insert
     suspend fun insertCheckDetails(checkDetailsEntity: CheckDetailsEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCategory(categoryEntity: CategoryEntity)
 
     @Insert
@@ -41,13 +41,17 @@ interface PaychecksDao {
     @Query("SELECT * FROM 'check'")
     suspend fun getCheckList(): List<CheckEntity>
 
+    @Query("SELECT * FROM `check` c  WHERE dateTime BETWEEN :startDate AND :endDate")
+    suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<CheckEntity>
+
+    @Query("SELECT * FROM `check` c  WHERE totalSum BETWEEN :startSum AND :endSum")
+    suspend fun getCheckListByTotalSum(startSum: Int, endSum: Int): List<CheckEntity>
+
     @Query("SELECT * FROM 'check' c WHERE c.category = :category")
     suspend fun getCheckWithCategoryList(category: String): List<CheckEntity>
 
     @Transaction
-    @Query("SELECT * " +
-    "FROM 'check' c " +
-    "WHERE c.id = :id")
+    @Query("SELECT * FROM 'check' c WHERE c.id = :id")
     suspend fun getAllCheckInfoById(id: Long): CheckAllInfoTuple
 
     @Query("SELECT cat.name, COUNT(c.category) AS count\n" +
@@ -58,19 +62,17 @@ interface PaychecksDao {
             "LIMIT 5;")
     suspend fun getCategoryCountList(): List<CategoryCountTuple>
 
-    @Query("SELECT * FROM goods\n" +
-            "ORDER BY price DESC;")
+    @Query("SELECT * FROM goods ORDER BY price DESC;")
     suspend fun getAllGoodsListByDesc(): List<GoodEntity>
 
-    @Query("SELECT * FROM goods\n" +
-            "ORDER BY price ASC;")
+    @Query("SELECT * FROM goods ORDER BY price ASC;")
     suspend fun getAllGoodsListByAsc(): List<GoodEntity>
 
-    @Query("SELECT COUNT(c.id) " +
-            "FROM 'check' c")
+    @Query("SELECT COUNT(c.id) FROM 'check' c")
     suspend fun getCheckCount(): Int
 
-    @Query("SELECT COUNT(g.id) " +
-            "FROM goods g")
+    @Query("SELECT COUNT(g.id) FROM goods g")
     suspend fun getGoodsCount(): Int
+
+
 }

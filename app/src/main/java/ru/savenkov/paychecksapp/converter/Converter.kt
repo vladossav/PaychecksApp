@@ -149,7 +149,7 @@ object Converter {
             item.shiftNumber,
             item.fiscalDocumentNumber,
             item.fiscalDriveNumber,
-            item.fiscalSign.toInt(),
+            item.fiscalSign,
             item.kktRegId,
             item.numberKkt,
             item.region,

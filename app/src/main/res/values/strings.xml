@@ -32,5 +32,9 @@
     <string name="statistics_sort_goods_by_asc_price">По возрастанию цены</string>
     <string name="statistics_sort_goods_by_desc_price">По убыванию цены</string>
 
+    <string name="saved_sort_date_by_bought">По дате покупки</string>
+    <string name="saved_sort_date_by_check_add">По дате добавления</string>
+    <string name="saved_sort_period">Период</string>
+    <string name="saved_sort_total_sum">Сумма</string>
 
 </resources>
