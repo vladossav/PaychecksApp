@@ -3,6 +3,8 @@ package ru.savenkov.paychecksapp.converter
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 import ru.savenkov.paychecksapp.model.room.entities.*
 import ru.savenkov.paychecksapp.presentation.model.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Converter {
 
@@ -24,11 +26,13 @@ object Converter {
         )
     }
 
-    fun toCategoryCountList(checkAmount: Int, goodsAmount: Int, categoryCountList: List<CategoryCountTuple>): StatisticsItem =
+    fun toCategoryCountList(checkAmount: Int, goodsAmount: Int,
+    categoryCountList: List<CategoryCountTuple>, checkTotalSum: Long): StatisticsItem =
         StatisticsItem(
             checkAmount,
             goodsAmount,
-            categoryCountList.associate { it.category to it.count }
+            categoryCountList.associate { it.category to it.count },
+            checkTotalSum
         )
 
     fun categoryToView(categoryEntityList: List<CategoryEntity>): List<String> =
@@ -168,4 +172,11 @@ object Converter {
         checkItem.data.jsonObj.items.map {
             GoodEntity(0, 0,it.name, it.price, it.quantity, it.sum)
         }
+
+    fun convertTimeToDate(time: Long): String {
+        val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        utc.timeInMillis = time
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return format.format(utc.time)
+    }
 }

@@ -30,11 +30,6 @@ class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
         checksList.postValue(list)
     }
 
-    fun convertTimeToDate(time: Long): String {
-        val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        utc.timeInMillis = time
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        return format.format(utc.time)
-    }
+
 
 }

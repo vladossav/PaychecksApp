@@ -59,15 +59,14 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         }
     }
 
-    override suspend fun getAllGoodsListByDesc(): List<CheckGood> {
-        val listEntity = dao.getAllGoodsListByDesc()
-        val list = Converter.goodsToView(listEntity)
-        return list
+
+    override suspend fun getAllGoodsListByPeriodByDesc(startDate: String, endDate: String): List<CheckGood> {
+        val listEntity = dao.getAllGoodsListByPeriodByDesc(startDate, endDate)
+        return  Converter.goodsToView(listEntity)
     }
 
-
-    override suspend fun getAllGoodsListByAsc(): List<CheckGood> {
-        val listEntity = dao.getAllGoodsListByAsc()
+    override suspend fun getAllGoodsListByPeriodByAsc(startDate: String, endDate: String): List<CheckGood> {
+        val listEntity = dao.getAllGoodsListByPeriodByAsc(startDate, endDate)
         return Converter.goodsToView(listEntity)
     }
 
@@ -81,11 +80,13 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         }
     }
 
-    override suspend fun getStatisticsItem(): StatisticsItem {
-        val listEntity = dao.getCategoryCountList()
-        val checkAmount = dao.getCheckCount()
-        val goodsAmount = dao.getGoodsCount()
-        return Converter.toCategoryCountList(checkAmount, goodsAmount, listEntity)
+    override suspend fun getStatisticsItemByPeriod(startDate: String, endDate: String): StatisticsItem {
+        val categoryCountList = dao.getCategoryCountListByPeriod(startDate, endDate)
+        val checkAmount = dao.getCheckCountByPeriod(startDate, endDate)
+        val goodsAmount = dao.getGoodsCountByPeriod(startDate, endDate)
+        var checkTotalSum = dao.getCheckTotalSumByPeriod(startDate, endDate)
+        if (checkTotalSum == null) checkTotalSum = 0
+        return Converter.toCategoryCountList(checkAmount, goodsAmount, categoryCountList, checkTotalSum)
     }
 
     override suspend fun getCheckById(id: Long): CheckAll? {

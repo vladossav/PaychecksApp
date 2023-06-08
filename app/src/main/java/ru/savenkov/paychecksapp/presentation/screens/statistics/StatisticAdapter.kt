@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.animation.Easing
@@ -18,6 +19,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.android.material.chip.Chip
+import com.google.android.material.datepicker.MaterialDatePicker
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.presentation.model.StatisticsItem
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
@@ -80,6 +82,12 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
     fun bind(item: StatisticsItem) {
         itemView.findViewById<TextView>(R.id.good_count).text = item.goodsAmount.toString()
         itemView.findViewById<TextView>(R.id.check_count).text = item.checkAmount.toString()
+
+        setSortingPopupMenu()
+        setPieChart(item)
+    }
+
+    private fun setSortingPopupMenu() {
         val sortButton = itemView.findViewById<Chip>(R.id.sort_button)
         sortButton.setOnClickListener {
             val popUpMenu = PopupMenu(parent.context, it)
@@ -94,11 +102,10 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
             }
             popUpMenu.show()
         }
-
-        setPieChart(item)
     }
 
     private fun setPieChart(item: StatisticsItem) {
+        val sumStr = "ИТОГО:\n${item.checkTotalSum / 100} руб.\n${item.checkTotalSum % 100} коп."
         val pieChart = itemView.findViewById<PieChart>(R.id.pieChart)
         pieChart.apply {
             description.isEnabled = false
@@ -106,7 +113,7 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
             isDrawHoleEnabled = true
             setHoleColor(Color.WHITE)
             setDrawCenterText(true)
-            centerText = "26 004 руб\n34 коп."
+            centerText = sumStr
             setCenterTextSize(20f)
             setCenterTextTypeface(Typeface.DEFAULT_BOLD)
             rotationAngle = 0f
@@ -114,9 +121,9 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
             isHighlightPerTapEnabled = true
             animateY(1400, Easing.EaseInOutQuad)
             legend.isEnabled = true
-
-            setEntryLabelColor(Color.WHITE)
-            setEntryLabelTextSize(12f)
+            setEntryLabelColor(Color.BLACK)
+            setEntryLabelTypeface(Typeface.DEFAULT_BOLD)
+            setEntryLabelTextSize(16f)
             highlightValues(null)
             setUsePercentValues(true)
             invalidate()
@@ -129,6 +136,7 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
         }
 
         val dataSet = PieDataSet(entries, "").apply {
+            valueTextColor = Color.BLACK
             setDrawIcons(true)
             sliceSpace = 5f
             iconsOffset = MPPointF(0f, 40f)
@@ -142,8 +150,6 @@ class StatisticViewHolder(private val parent: ViewGroup, private val onSortClick
             setValueTypeface(Typeface.DEFAULT_BOLD)
             setValueTextColor(Color.WHITE)
         }
-
-
         pieChart.data = data
         pieChart.legend.apply {
             form = Legend.LegendForm.CIRCLE

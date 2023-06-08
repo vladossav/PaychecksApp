@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
+import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.databinding.FragmentSavedBinding
 import ru.savenkov.paychecksapp.presentation.screens.check.CheckFragment
 
@@ -124,8 +125,8 @@ class SavedFragment : Fragment() {
         datePickerDialog.show(childFragmentManager, "TAFAF")
 
         datePickerDialog.addOnPositiveButtonClickListener {
-            val startDate = viewModel.convertTimeToDate(it.first)
-            val endDate = viewModel.convertTimeToDate(it.second)
+            val startDate = Converter.convertTimeToDate(it.first)
+            val endDate = Converter.convertTimeToDate(it.second)
             binding.sortPeriod.text = String.format("от $startDate до $endDate")
             binding.sortPeriod.isCloseIconVisible = true
             viewModel.getCheckListByPeriod(startDate, endDate)

@@ -22,7 +22,7 @@ interface CheckRepository {
     suspend fun saveCategory(category: String)
 
     //statistics
-    suspend fun getStatisticsItem(): StatisticsItem
-    suspend fun getAllGoodsListByDesc(): List<CheckGood>
-    suspend fun getAllGoodsListByAsc(): List<CheckGood>
+    suspend fun getStatisticsItemByPeriod(startDate: String, endDate: String): StatisticsItem
+    suspend fun getAllGoodsListByPeriodByDesc(startDate: String, endDate: String): List<CheckGood>
+    suspend fun getAllGoodsListByPeriodByAsc(startDate: String, endDate: String): List<CheckGood>
 }

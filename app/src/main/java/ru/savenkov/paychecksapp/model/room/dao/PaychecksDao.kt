@@ -47,8 +47,11 @@ interface PaychecksDao {
     @Query("SELECT * FROM `check` c  WHERE dateTime BETWEEN :startDate AND :endDate")
     suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<CheckEntity>
 
-    @Query("SELECT * FROM `check` c  WHERE totalSum BETWEEN :startSum AND :endSum")
-    suspend fun getCheckListByTotalSum(startSum: Int, endSum: Int): List<CheckEntity>
+    @Query("SELECT * FROM `check` c  " +
+            "WHERE dateTime BETWEEN :startDate AND :endDate " +
+            "AND totalSum BETWEEN :startSum AND :endSum")
+    suspend fun getCheckListByPeriodByTotalSum(startDate: String, endDate: String,
+                                               startSum: Int, endSum: Int): List<CheckEntity>
 
     @Query("SELECT * FROM 'check' c WHERE c.category = :category")
     suspend fun getCheckWithCategoryList(category: String): List<CheckEntity>
@@ -60,22 +63,39 @@ interface PaychecksDao {
     @Query("SELECT cat.name, COUNT(c.category) AS count\n" +
             "FROM category cat\n" +
             "LEFT JOIN `check` c ON cat.name = c.category\n" +
+            "WHERE c.dateTime BETWEEN :start AND :end " +
             "GROUP BY cat.name\n" +
             "ORDER BY count DESC\n" +
             "LIMIT 5;")
-    suspend fun getCategoryCountList(): List<CategoryCountTuple>
+    suspend fun getCategoryCountListByPeriod(start: String, end: String): List<CategoryCountTuple>
 
-    @Query("SELECT * FROM goods ORDER BY price DESC;")
-    suspend fun getAllGoodsListByDesc(): List<GoodEntity>
+    @Query("SELECT g.id, g.checkId, g.name, g.price, g.quantity, g.sum \n" +
+            "FROM goods g\n" +
+            "JOIN 'check' c ON g.checkId = c.id \n" +
+            "WHERE g.id in (SELECT max(g.id) FROM goods g group by g.name ORDER BY g.price DESC) " +
+            "AND c.dateTime BETWEEN :start AND :end \n" +
+            "ORDER BY g.price DESC")
+    suspend fun getAllGoodsListByPeriodByDesc(start: String, end: String): List<GoodEntity>
 
-    @Query("SELECT * FROM goods ORDER BY price ASC;")
-    suspend fun getAllGoodsListByAsc(): List<GoodEntity>
+    @Query("SELECT g.id, g.checkId, g.name, g.price, g.quantity, g.sum \n" +
+            "FROM goods g\n" +
+            "JOIN 'check' c ON g.checkId = c.id \n" +
+            "WHERE g.id in (SELECT max(g.id) FROM goods g group by g.name ORDER BY g.price DESC) " +
+            "AND c.dateTime BETWEEN :start AND :end\n" +
+            "ORDER BY g.price ASC")
+    suspend fun getAllGoodsListByPeriodByAsc(start: String, end: String): List<GoodEntity>
 
-    @Query("SELECT COUNT(c.id) FROM 'check' c")
-    suspend fun getCheckCount(): Int
 
-    @Query("SELECT COUNT(g.id) FROM goods g")
-    suspend fun getGoodsCount(): Int
 
+    @Query("SELECT COUNT(c.id) FROM 'check' c WHERE c.dateTime BETWEEN :start AND :end")
+    suspend fun getCheckCountByPeriod(start: String, end: String): Int
+
+    @Query("SELECT COUNT(g.id) FROM goods g " +
+            "JOIN 'check' c ON g.checkId = c.id \n" +
+            "WHERE c.dateTime BETWEEN :start AND :end")
+    suspend fun getGoodsCountByPeriod(start: String, end: String): Int
+
+    @Query("SELECT SUM(c.totalSum) FROM 'check' c WHERE c.dateTime BETWEEN :start AND :end")
+    suspend fun getCheckTotalSumByPeriod(start: String, end: String): Long?
 
 }

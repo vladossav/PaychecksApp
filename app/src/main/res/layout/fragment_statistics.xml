@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/statistics_holder"
+    tools:context=".presentation.screens.statistics.StatisticsFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:context=".presentation.screens.statistics.StatisticsFragment" />
+    android:layout_height="match_parent" >
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/sort_period"
+        android:text="@string/saved_sort_period"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_margin="10dp"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        app:ensureMinTouchTargetSize="false"
+        app:iconStartPadding="4dp"
+        app:textStartPadding="2dp"
+        app:chipIcon="@drawable/ic_calendar_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/sort_period_label"
+        android:textColor="@color/text_color"
+        android:textSize="20sp"
+        android:text="@string/statistics_sort_period_default_label"
+        android:layout_width="0dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        app:layout_constraintBaseline_toBaselineOf="@id/sort_period"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/sort_period"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statistics_holder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/sort_period"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+         />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
