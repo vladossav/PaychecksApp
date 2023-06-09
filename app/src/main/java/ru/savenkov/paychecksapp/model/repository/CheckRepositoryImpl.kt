@@ -35,8 +35,7 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
     override suspend fun getCheckWithCategory(category: String): List<Check>  {
         Log.d("Room", "getCheckWithCategory")
         val listEntity = dao.getCheckWithCategoryList(category)
-        val list = Converter.toView(listEntity)
-        return list
+        return Converter.toView(listEntity)
     }
 
     override suspend fun getCheckList(): List<Check> {
@@ -78,6 +77,18 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())
         }
+    }
+
+    override suspend fun getCheckListByParams(
+        category: String?,
+        startDate: String,
+        endDate: String,
+        startSum: String,
+        endSum: String
+    ): List<Check> {
+        val list = if (category == null) dao.getCheckListByPeriodByTotalSum(startDate, endDate, startSum, endSum)
+        else dao.getCheckListByPeriodByTotalSumWithCategory(category, startDate, endDate, startSum, endSum)
+        return Converter.toView(list)
     }
 
     override suspend fun getStatisticsItemByPeriod(startDate: String, endDate: String): StatisticsItem {

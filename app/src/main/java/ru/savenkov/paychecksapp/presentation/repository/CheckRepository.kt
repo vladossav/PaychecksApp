@@ -17,6 +17,7 @@ interface CheckRepository {
     suspend fun getCheckWithCategory(category: String): List<Check>
     suspend fun getCheckList(): List<Check>
     suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<Check>
+    suspend fun getCheckListByParams(category: String?, startDate: String, endDate: String, startSum: String, endSum: String): List<Check>
 
     val categoryList: Flow<List<String>>
     suspend fun saveCategory(category: String)

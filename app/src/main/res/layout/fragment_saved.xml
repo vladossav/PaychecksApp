@@ -47,26 +47,10 @@
         android:layout_height="wrap_content"/>
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/sort_date"
-        android:text="@string/saved_sort_date_by_bought"
-        android:textColor="@color/text_color"
-        app:ensureMinTouchTargetSize="false"
-        style="@style/Widget.MaterialComponents.Chip.Action"
-        app:iconStartPadding="4dp"
-        app:textStartPadding="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"
-        app:chipIcon="@drawable/ic_sort_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categories_holder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <com.google.android.material.chip.Chip
         android:id="@+id/sort_period"
         android:text="@string/saved_sort_period"
         app:layout_constraintTop_toBottomOf="@id/categories_holder"
-        app:layout_constraintStart_toEndOf="@id/sort_date"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="10dp"
         style="@style/Widget.MaterialComponents.Chip.Action"
         android:layout_marginTop="10dp"

@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.data
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
-import ru.savenkov.paychecksapp.presentation.model.CheckAdapterItem
 import ru.savenkov.paychecksapp.presentation.model.CheckAll
 import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
 import java.text.SimpleDateFormat
@@ -20,7 +19,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     private val _checkAll = MutableLiveData<CheckAll>()
     val checkAll: LiveData<CheckAll> = _checkAll
 
-    val state = MutableLiveData<State>(State.NOT_SAVED)
+    val checkSavedState = MutableLiveData<CheckSavedState>(CheckSavedState.NOT_SAVED)
     val checkName = MutableLiveData<String>()
     val checkCategory = MutableLiveData<String?>(null)
     private val checkAllFromApi = MutableLiveData<CheckItem>()
@@ -29,7 +28,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
         val name = if (checkName.value == null) getDefaultCheckName()
         else checkName.value!!
         repository.saveCheck(checkAllFromApi.value!!, name, checkCategory.value)
-        state.postValue(State.SAVED)
+        checkSavedState.postValue(CheckSavedState.SAVED)
     }
 
     fun getCheckFromMock() {
@@ -65,7 +64,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     }
 
     fun makeSaveDeleteAction() {
-        if (state.value == State.NOT_SAVED) {
+        if (checkSavedState.value == CheckSavedState.NOT_SAVED) {
             saveCheck()
         }
         else {
@@ -82,7 +81,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
 
     fun removeCheck() = viewModelScope.launch(Dispatchers.IO) {
         repository.removeCheckById(_checkAll.value!!.checkInfo.id)
-        state.postValue(State.NOT_SAVED)
+        checkSavedState.postValue(CheckSavedState.NOT_SAVED)
     }
 
     private fun getDefaultCheckName(): String {

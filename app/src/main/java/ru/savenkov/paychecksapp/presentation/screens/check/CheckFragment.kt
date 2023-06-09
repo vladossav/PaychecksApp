@@ -3,7 +3,6 @@ package ru.savenkov.paychecksapp.presentation.screens.check
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,8 +20,6 @@ import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.databinding.FragmentCheckBinding
 import ru.savenkov.paychecksapp.presentation.model.CheckAdapterItem
-import ru.savenkov.paychecksapp.presentation.screens.saved.SavedFragment
-
 
 class CheckFragment : Fragment() {
     private var _binding: FragmentCheckBinding? = null
@@ -39,7 +36,7 @@ class CheckFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (arguments?.containsKey(QR_RAW_KEY) == true) {
-            viewModel.state.value = State.NOT_SAVED
+            viewModel.checkSavedState.value = CheckSavedState.NOT_SAVED
             val qrRaw = requireArguments().getString(QR_RAW_KEY)
             if (qrRaw == "mock") viewModel.getCheckFromMock()
             /*if (!viewModel.getCheck(qrRaw))
@@ -48,7 +45,7 @@ class CheckFragment : Fragment() {
         }
 
         if (arguments?.containsKey(CHECK_ID_KEY) == true) {
-            viewModel.state.value = State.SAVED
+            viewModel.checkSavedState.value = CheckSavedState.SAVED
             val checkId = requireArguments().getLong(CHECK_ID_KEY)
             viewModel.getCheckById(checkId)
             Log.d("CheckFragment", checkId.toString())
@@ -56,7 +53,7 @@ class CheckFragment : Fragment() {
 
         setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
             viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
-            if (viewModel.state.value == State.SAVED) {
+            if (viewModel.checkSavedState.value == CheckSavedState.SAVED) {
                 viewModel.updateCheckCategory()
             }
             Log.d("Category", "CheckFragmentResult: " + viewModel.checkCategory.value)
@@ -93,8 +90,8 @@ class CheckFragment : Fragment() {
             binding.checkName.setText(it, TextView.BufferType.EDITABLE)
         }
 
-        viewModel.state.observe(viewLifecycleOwner) {state->
-            if (state == State.SAVED) {
+        viewModel.checkSavedState.observe(viewLifecycleOwner) { state->
+            if (state == CheckSavedState.SAVED) {
                 binding.saveDeleteButton.text = resources.getString(R.string.check_delete_button)
             }
             else {
@@ -131,7 +128,7 @@ class CheckFragment : Fragment() {
         binding.checkName.setOnFocusChangeListener { _, _ ->
             viewModel.checkName.value = binding.checkName.text.toString()
             Log.d("CheckFragment", binding.checkName.text.toString())
-            if (viewModel.state.value == State.SAVED) {
+            if (viewModel.checkSavedState.value == CheckSavedState.SAVED) {
                 viewModel.updateCheckName()
             }
         }

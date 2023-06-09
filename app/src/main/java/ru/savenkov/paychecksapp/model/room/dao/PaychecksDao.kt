@@ -47,11 +47,18 @@ interface PaychecksDao {
     @Query("SELECT * FROM `check` c  WHERE dateTime BETWEEN :startDate AND :endDate")
     suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<CheckEntity>
 
-    @Query("SELECT * FROM `check` c  " +
-            "WHERE dateTime BETWEEN :startDate AND :endDate " +
-            "AND totalSum BETWEEN :startSum AND :endSum")
+    @Query("SELECT * FROM `check` c " +
+            "WHERE c.dateTime BETWEEN :startDate AND :endDate " +
+            "AND c.totalSum BETWEEN :startSum AND :endSum " +
+            "AND c.category = :category")
+    suspend fun getCheckListByPeriodByTotalSumWithCategory(category: String, startDate: String, endDate: String,
+                                               startSum: String, endSum: String): List<CheckEntity>
+
+    @Query("SELECT * FROM `check` c " +
+            "WHERE c.dateTime BETWEEN :startDate AND :endDate " +
+            "AND c.totalSum BETWEEN :startSum AND :endSum")
     suspend fun getCheckListByPeriodByTotalSum(startDate: String, endDate: String,
-                                               startSum: Int, endSum: Int): List<CheckEntity>
+                                               startSum: String, endSum: String): List<CheckEntity>
 
     @Query("SELECT * FROM 'check' c WHERE c.category = :category")
     suspend fun getCheckWithCategoryList(category: String): List<CheckEntity>
@@ -97,5 +104,6 @@ interface PaychecksDao {
 
     @Query("SELECT SUM(c.totalSum) FROM 'check' c WHERE c.dateTime BETWEEN :start AND :end")
     suspend fun getCheckTotalSumByPeriod(start: String, end: String): Long?
+
 
 }

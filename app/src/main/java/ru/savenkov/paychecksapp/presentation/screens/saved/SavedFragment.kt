@@ -1,16 +1,15 @@
 package ru.savenkov.paychecksapp.presentation.screens.saved
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
@@ -48,7 +47,8 @@ class SavedFragment : Fragment() {
         }
 
         val categoryAdapter = CategoryAdapter {category ->
-            viewModel.getChecksWithCategory(category)
+            viewModel.sortSavedSortParams.category = category
+            viewModel.getCheckListBySortParams()
             binding.selectedCategory.isVisible = true
             binding.selectedCategory.text = category
         }
@@ -56,11 +56,12 @@ class SavedFragment : Fragment() {
         binding.savedHolder.adapter = savedChecksAdapter
         binding.categoriesHolder.adapter = categoryAdapter
         binding.selectedCategory.setOnCloseIconClickListener {
-            viewModel.getCheckList()
+            viewModel.sortSavedSortParams.category = null
+            viewModel.getCheckListBySortParams()
             it.isVisible = false
         }
 
-        setSorting()
+        setFiltersFromSorting()
 
         viewModel.checksList.observe(viewLifecycleOwner) {
             savedChecksAdapter.checkList = it
@@ -75,38 +76,43 @@ class SavedFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getCheckList()
+        viewModel.getCheckListBySortParams()
     }
 
-    private fun setSorting() {
-        binding.sortDate.setOnClickListener {
-            PopupMenu(requireContext(), it).apply {
-                menuInflater.inflate(R.menu.saved_sort_date_menu, this.menu)
-                setOnMenuItemClickListener { item ->
-                    binding.sortDate.text = item.title.toString()
-                    when (item.itemId) {
-
-                    }
-                    true
-                }
-            }.show()
-        }
-
+    private fun setFiltersFromSorting() {
         binding.sortPeriod.setOnClickListener {
             setDateRangePicker()
-        }
-
-        binding.sortTotalSum.setOnClickListener {
-            val popUpMenu = PopupMenu(requireContext(), it)
-            val dialog = Dialog(requireContext())
-            dialog.setContentView(R.layout.saved_sum_slider)
-            dialog.show()
         }
 
         binding.sortPeriod.setOnCloseIconClickListener {
             binding.sortPeriod.text = getString(R.string.saved_sort_period)
             binding.sortPeriod.isCloseIconVisible = false
-            viewModel.getCheckList()
+            viewModel.sortSavedSortParams.periodFrom = "0"
+            viewModel.sortSavedSortParams.periodTill = "9"
+            viewModel.getCheckListBySortParams()
+        }
+
+        setFragmentResultListener(SortSumDialogFragment.SORT_TOTAL_SUM_REQUEST_KEY) { _, bundle ->
+            val fromRubles = bundle.getString(SortSumDialogFragment.SORT_TOTAL_SUM_FROM_KEY)
+            val tillRubles = bundle.getString(SortSumDialogFragment.SORT_TOTAL_SUM_TILL_KEY)
+            val totalSumLabel = "$fromRubles - $tillRubles"
+            binding.sortTotalSum.text = totalSumLabel
+            binding.sortTotalSum.isCloseIconVisible = true
+            viewModel.sortSavedSortParams.sumFrom = (fromRubles!!.toLong() * 100).toString()
+            viewModel.sortSavedSortParams.sumTill = (tillRubles!!.toLong() * 100).toString()
+            viewModel.getCheckListBySortParams()
+        }
+
+        binding.sortTotalSum.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_saved_to_sortSumDialogFragment)
+        }
+
+        binding.sortTotalSum.setOnCloseIconClickListener {
+            binding.sortTotalSum.text = getString(R.string.saved_sort_total_sum)
+            binding.sortTotalSum.isCloseIconVisible = false
+            viewModel.sortSavedSortParams.sumFrom = "0"
+            viewModel.sortSavedSortParams.sumTill = "10000000"
+            viewModel.getCheckListBySortParams()
         }
     }
 
@@ -129,7 +135,9 @@ class SavedFragment : Fragment() {
             val endDate = Converter.convertTimeToDate(it.second)
             binding.sortPeriod.text = String.format("от $startDate до $endDate")
             binding.sortPeriod.isCloseIconVisible = true
-            viewModel.getCheckListByPeriod(startDate, endDate)
+            viewModel.sortSavedSortParams.periodFrom = startDate
+            viewModel.sortSavedSortParams.periodTill = endDate
+            viewModel.getCheckListBySortParams()
         }
 
         datePickerDialog.addOnNegativeButtonClickListener {

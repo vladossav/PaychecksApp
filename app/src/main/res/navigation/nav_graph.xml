@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_navigation_saved_to_checkFragment"
             app:destination="@id/checkFragment" />
+        <action
+            android:id="@+id/action_navigation_saved_to_sortSumDialogFragment"
+            app:destination="@id/sortSumDialogFragment" />
     </fragment>
 
     <fragment
@@ -46,4 +49,8 @@
         android:id="@+id/categoryDialogFragment"
         android:name="ru.savenkov.paychecksapp.presentation.screens.check.CategoryDialogFragment"
         android:label="CategoryDialogFragment" />
+    <dialog
+        android:id="@+id/sortSumDialogFragment"
+        android:name="ru.savenkov.paychecksapp.presentation.screens.saved.SortSumDialogFragment"
+        android:label="SortSumDialogFragment" />
 </navigation>
