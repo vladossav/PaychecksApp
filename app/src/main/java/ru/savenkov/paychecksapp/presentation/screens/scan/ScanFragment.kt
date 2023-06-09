@@ -43,11 +43,11 @@ class ScanFragment : Fragment() {
     ): View {
         binding = FragmentScanBinding.inflate(inflater, container, false)
 
-        findNavController().navigate(
+        /*findNavController().navigate(
             R.id.action_navigation_scan_to_checkFragment,
             bundleOf(CheckFragment.QR_RAW_KEY to "mock")
-        )
-        //initQrScanner()
+        )*/
+        initQrScanner()
 
         return binding!!.root
     }

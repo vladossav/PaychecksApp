@@ -18,23 +18,17 @@ import java.util.*
 class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     private val _checkAll = MutableLiveData<CheckAll>()
     val checkAll: LiveData<CheckAll> = _checkAll
-
     val checkSavedState = MutableLiveData<CheckSavedState>(CheckSavedState.NOT_SAVED)
     val checkName = MutableLiveData<String>()
     val checkCategory = MutableLiveData<String?>(null)
     private val checkAllFromApi = MutableLiveData<CheckItem>()
+    var qrCodeRaw: String = "null"
 
-    fun saveCheck() = viewModelScope.launch(Dispatchers.IO) {
-        val name = if (checkName.value == null) getDefaultCheckName()
-        else checkName.value!!
-        repository.saveCheck(checkAllFromApi.value!!, name, checkCategory.value)
-        checkSavedState.postValue(CheckSavedState.SAVED)
-    }
 
     fun getCheckFromMock() {
         checkAllFromApi.value = data
-        _checkAll.value = Converter.fullCheckToView(data)
-        checkName.value = getDefaultCheckName()
+        _checkAll.value = Converter.fullCheckToView("  ", data)
+        checkName.value = getCurrentDateTime()
     }
 
     fun updateCheckName() = viewModelScope.launch(Dispatchers.IO) {
@@ -53,10 +47,11 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
                 isSuccess = false
                 return@launch
             }
+            qrCodeRaw = qrRaw
             val checkItemFromApi = repository.getCheckFromApi(qrRaw)
             checkAllFromApi.postValue(checkItemFromApi!!)
-            val check = Converter.fullCheckToView(checkItemFromApi)
-            checkName.postValue(getDefaultCheckName())
+            val check = Converter.fullCheckToView(qrRaw, checkItemFromApi)
+            checkName.postValue(check.checkInfo.retailPlace)
             _checkAll.postValue(check)
             isSuccess = true
         }
@@ -66,6 +61,13 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     fun makeSaveDeleteAction() {
         if (checkSavedState.value == CheckSavedState.NOT_SAVED) saveCheck()
         else removeCheck()
+    }
+
+    private fun saveCheck() = viewModelScope.launch(Dispatchers.IO) {
+        val name = if (checkName.value == null) checkAll.value?.checkInfo?.retailPlace ?: "Чек"
+        else checkName.value!!
+        repository.saveCheck(qrCodeRaw!!, checkAllFromApi.value!!, name, checkCategory.value, getCurrentDateTime())
+        checkSavedState.postValue(CheckSavedState.SAVED)
     }
 
     fun getCheckById(id: Long) = viewModelScope.launch(Dispatchers.IO) {
@@ -80,9 +82,8 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
         checkSavedState.postValue(CheckSavedState.NOT_SAVED)
     }
 
-    private fun getDefaultCheckName(): String {
+    private fun getCurrentDateTime(): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        val currentDateAndTime: String = sdf.format(Date())
-        return "Чек от $currentDateAndTime"
+        return sdf.format(Date())
     }
 }

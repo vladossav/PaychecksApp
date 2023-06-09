@@ -1,15 +1,23 @@
 package ru.savenkov.paychecksapp.presentation.screens.check
 
+import android.R.attr.bitmap
+import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidmads.library.qrgenearator.QRGContents
+import androidmads.library.qrgenearator.QRGEncoder
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ru.savenkov.paychecksapp.presentation.util.RecyclerDiffUtil
+import com.google.zxing.WriterException
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.presentation.model.CheckAdapterItem
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
 import ru.savenkov.paychecksapp.presentation.model.CheckInfo
+import ru.savenkov.paychecksapp.presentation.util.RecyclerDiffUtil
+
 
 class CheckGoodsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var checkList: List<CheckAdapterItem> = emptyList()
@@ -96,6 +104,18 @@ class CheckInfoViewHolder(parent: ViewGroup, private val layoutId: Int): Recycle
             itemView.findViewById<TextView>(R.id.fiscalDriveNumber).text = fn
             itemView.findViewById<TextView>(R.id.fiscalDocumentNumber).text = fd
             itemView.findViewById<TextView>(R.id.fiscalSign).text = fpd
+            setQrCode(item.qrRaw)
+        }
+    }
+
+    private fun setQrCode(qrRaw: String) {
+        val qrgEncoder = QRGEncoder(qrRaw, null, QRGContents.Type.TEXT, 400)
+
+        try {
+            val bitmap = qrgEncoder.getBitmap(0)
+            itemView.findViewById<ImageView>(R.id.qr_code).setImageBitmap(bitmap)
+        } catch (e: WriterException) {
+            Log.v("QRCODE", e.toString())
         }
     }
 }

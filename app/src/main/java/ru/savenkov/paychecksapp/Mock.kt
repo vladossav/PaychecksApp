@@ -82,13 +82,7 @@ val data: CheckItem = CheckItem(
             ),
             kktRegId="0005513318051218",
             numberKkt="0128001533",
-            metadata = CheckItem.Data.JsonObj.Metadata(
-                address="630106,Россия,Новосибирская область,город Новосибирск г.о.,,Новосибирск г,,Громова ул,,д. 15,,,,,",
-                ofdId="ofd9",
-                receiveDate="2022-09-12T10:53:39Z",
-                subtype="receipt",
-                id=4412072596026958595
-            ),
+
             operator ="Макаренко",
             region="54",
             requestNumber=385,

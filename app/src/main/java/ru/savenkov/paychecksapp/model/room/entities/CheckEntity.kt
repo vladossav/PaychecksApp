@@ -20,5 +20,7 @@ data class CheckEntity(
     val name: String,
     val dateTime: String,
     val category: String?,
-    val totalSum: Int
+    val totalSum: Int,
+    val qrRaw: String,
+    val loadedDateTime: String
 )

@@ -20,6 +20,8 @@
 
     <TextView
         android:id="@+id/shopName"
+        android:gravity="center"
+        android:layout_marginHorizontal="5dp"
         android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +32,8 @@
 
     <TextView
         android:id="@+id/shopAddress"
+        android:gravity="center"
+        android:layout_marginHorizontal="5dp"
         android:textColor="@color/text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

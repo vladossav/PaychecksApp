@@ -63,10 +63,11 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         return Converter.goodsToView(listEntity)
     }
 
-    override suspend fun saveCheck(checkItem: CheckItem, name: String, category: String?) {
+    override suspend fun saveCheck(qrRaw: String, checkItem: CheckItem, name: String, category: String?,
+        loadedAt: String) {
         try {
             if(category != null) saveCategory(category)
-            val entity = Converter.toDatabase(checkItem, name, category)
+            val entity = Converter.toDatabase(qrRaw, checkItem, name, category, loadedAt)
             dao.insertAllCheckInfo(entity)
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())

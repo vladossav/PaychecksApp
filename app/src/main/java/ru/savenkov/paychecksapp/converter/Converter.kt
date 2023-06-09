@@ -9,9 +9,12 @@ import java.util.*
 object Converter {
 
 
-    fun toDatabase(checkItem: CheckItem, name: String,category: String? = ""): CheckAllInfoTuple =
+    fun toDatabase(
+        qrRaw: String, checkItem: CheckItem, name: String, category: String? = "",
+        loadedAt: String
+    ): CheckAllInfoTuple =
         CheckAllInfoTuple(
-            toCheckEntity(checkItem,name, category),
+            toCheckEntity(qrRaw, checkItem, name, category, loadedAt),
             toCheckDetailsEntity(checkItem),
             toGoodEntityList(checkItem)
         )
@@ -38,7 +41,7 @@ object Converter {
     fun categoryToView(categoryEntityList: List<CategoryEntity>): List<String> =
         categoryEntityList.map { it.name }
 
-    fun fullCheckToView(checkItem: CheckItem): CheckAll {
+    fun fullCheckToView(qrRaw: String, checkItem: CheckItem): CheckAll {
         val goodsList = checkItem.data.jsonObj.items.map {
             CheckGood(
                 0,
@@ -51,6 +54,7 @@ object Converter {
         }
         val item = checkItem.data.jsonObj
         val checkDetails = CheckInfo(
+            qrRaw,
             0,
             " ",
             item.dateTime.replace("T".toRegex()," "),
@@ -100,6 +104,7 @@ object Converter {
 
     fun checkInfoToView(checkAllInfo: CheckAllInfoTuple): CheckInfo =
         CheckInfo(
+            checkAllInfo.check.qrRaw,
             checkAllInfo.check.id,
             checkAllInfo.check.name,
             checkAllInfo.check.dateTime.replace("T".toRegex()," "),
@@ -111,7 +116,7 @@ object Converter {
             checkAllInfo.details.shiftNumber.toString(),
             checkAllInfo.details.fiscalDocumentNumber.toString(),
             checkAllInfo.details.fiscalDriveNumber,
-            checkAllInfo.details.fiscalSign.toString(),
+            checkAllInfo.details.fiscalSign,
             checkAllInfo.details.kktRegId,
             checkAllInfo.details.numberKkt,
             checkAllInfo.details.region,
@@ -136,14 +141,17 @@ object Converter {
             else -> ""
         }
 
-    private fun toCheckEntity(checkItem: CheckItem, name: String,category: String?): CheckEntity {
+    private fun toCheckEntity(qrRaw:String, checkItem: CheckItem, name: String,
+                              category: String?, loadedAt: String): CheckEntity {
         val item = checkItem.data.jsonObj
         return CheckEntity(
             0,
             name,
             item.dateTime,
             category,
-            item.totalSum
+            item.totalSum,
+            qrRaw,
+            loadedAt
         )
     }
 

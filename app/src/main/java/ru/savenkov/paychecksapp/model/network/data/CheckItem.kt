@@ -36,7 +36,6 @@ data class CheckItem(
             val items: List<Item> = listOf(), //товары
             val totalSum: Int = 0, //ИТОГО
 
-            val metadata: Metadata = Metadata(),
             val kktRegId: String = "", //Рег № ККТ
             val numberKkt: String = "", //ЗН ККТ
             val fiscalDocumentNumber: Int = 0, //ФД
@@ -55,15 +54,6 @@ data class CheckItem(
                 val price: Int = 0, //коп.
                 val quantity: Float = 0f,
                 val sum: Int = 0 //коп.
-            )
-
-            @JsonClass(generateAdapter = true)
-            data class Metadata(
-                val address: String = "",
-                val id: Long = 0,
-                val ofdId: String = "",
-                val receiveDate: String = "",
-                val subtype: String = ""
             )
         }
     }

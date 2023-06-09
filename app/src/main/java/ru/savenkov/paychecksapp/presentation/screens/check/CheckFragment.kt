@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -39,8 +40,8 @@ class CheckFragment : Fragment() {
             viewModel.checkSavedState.value = CheckSavedState.NOT_SAVED
             val qrRaw = requireArguments().getString(QR_RAW_KEY)
             if (qrRaw == "mock") viewModel.getCheckFromMock()
-            /*if (!viewModel.getCheck(qrRaw))
-                Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()*/
+            if (!viewModel.getCheck(qrRaw))
+                Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
             Log.d("CheckFragment", qrRaw.toString())
         }
 

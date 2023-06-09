@@ -11,7 +11,7 @@ interface CheckRepository {
     //check
     suspend fun getCheckById(id: Long): CheckAll?
     suspend fun getCheckFromApi(qrRaw: String): CheckItem?
-    suspend fun saveCheck(checkItem: CheckItem, name: String, category: String?)
+    suspend fun saveCheck(qrRaw: String, checkItem: CheckItem, name: String, category: String?, loadedAt: String)
     suspend fun removeCheckById(id: Long)
     suspend fun updateCheckName(checkId: Long, newName: String)
     suspend fun updateCheckCategory(checkId: Long, category: String?)

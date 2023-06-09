@@ -1,6 +1,7 @@
 package ru.savenkov.paychecksapp.presentation.model
 
 data class CheckInfo(
+    val qrRaw: String,
     val id: Long,
     val name: String,
     val dateTime: String,
