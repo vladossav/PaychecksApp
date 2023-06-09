@@ -51,13 +51,7 @@ class CheckFragment : Fragment() {
             Log.d("CheckFragment", checkId.toString())
         }
 
-        setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
-            viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
-            if (viewModel.checkSavedState.value == CheckSavedState.SAVED) {
-                viewModel.updateCheckCategory()
-            }
-            Log.d("Category", "CheckFragmentResult: " + viewModel.checkCategory.value)
-        }
+
     }
 
     override fun onCreateView(
@@ -73,8 +67,11 @@ class CheckFragment : Fragment() {
         val goodsAdapter = CheckGoodsAdapter()
         binding.checkHolder.adapter = goodsAdapter
 
-        binding.closeButton.setOnClickListener {
-            findNavController().popBackStack()
+        setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
+            viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
+            if (viewModel.checkSavedState.value == CheckSavedState.SAVED) {
+                viewModel.updateCheckCategory()
+            }
         }
 
         binding.categoryButton.setOnClickListener {
@@ -90,13 +87,15 @@ class CheckFragment : Fragment() {
             binding.checkName.setText(it, TextView.BufferType.EDITABLE)
         }
 
-        viewModel.checkSavedState.observe(viewLifecycleOwner) { state->
-            if (state == CheckSavedState.SAVED) {
-                binding.saveDeleteButton.text = resources.getString(R.string.check_delete_button)
-            }
-            else {
-                binding.saveDeleteButton.text = resources.getString(R.string.check_save_button)
-            }
+        viewModel.checkCategory.observe(viewLifecycleOwner) {
+            binding.categoryButton.text = if (viewModel.checkCategory.value == null)
+                resources.getString(R.string.check_category_button_default)
+            else viewModel.checkCategory.value
+        }
+
+        viewModel.checkSavedState.observe(viewLifecycleOwner) { state ->
+            binding.saveDeleteButton.text = if (state == CheckSavedState.SAVED) resources.getString(R.string.check_delete_button)
+            else resources.getString(R.string.check_save_button)
         }
 
         setCheckEditNameSettings()
@@ -127,7 +126,6 @@ class CheckFragment : Fragment() {
 
         binding.checkName.setOnFocusChangeListener { _, _ ->
             viewModel.checkName.value = binding.checkName.text.toString()
-            Log.d("CheckFragment", binding.checkName.text.toString())
             if (viewModel.checkSavedState.value == CheckSavedState.SAVED) {
                 viewModel.updateCheckName()
             }

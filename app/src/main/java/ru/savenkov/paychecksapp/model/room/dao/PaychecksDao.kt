@@ -41,12 +41,6 @@ interface PaychecksDao {
     @Query("SELECT * FROM category")
     fun getCategoryList(): Flow<List<CategoryEntity>>
 
-    @Query("SELECT * FROM 'check'")
-    suspend fun getCheckList(): List<CheckEntity>
-
-    @Query("SELECT * FROM `check` c  WHERE dateTime BETWEEN :startDate AND :endDate")
-    suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<CheckEntity>
-
     @Query("SELECT * FROM `check` c " +
             "WHERE c.dateTime BETWEEN :startDate AND :endDate " +
             "AND c.totalSum BETWEEN :startSum AND :endSum " +
@@ -59,9 +53,6 @@ interface PaychecksDao {
             "AND c.totalSum BETWEEN :startSum AND :endSum")
     suspend fun getCheckListByPeriodByTotalSum(startDate: String, endDate: String,
                                                startSum: String, endSum: String): List<CheckEntity>
-
-    @Query("SELECT * FROM 'check' c WHERE c.category = :category")
-    suspend fun getCheckWithCategoryList(category: String): List<CheckEntity>
 
     @Transaction
     @Query("SELECT * FROM 'check' c WHERE c.id = :id")
@@ -92,7 +83,11 @@ interface PaychecksDao {
             "ORDER BY g.price ASC")
     suspend fun getAllGoodsListByPeriodByAsc(start: String, end: String): List<GoodEntity>
 
+    @Query("UPDATE 'check' SET name = :newName WHERE id = :checkId")
+    suspend fun updateCheckName(checkId: Long, newName: String)
 
+    @Query("UPDATE 'check' SET category = :newCategory WHERE id = :checkId")
+    suspend fun updateCheckCategory(checkId: Long, newCategory: String?)
 
     @Query("SELECT COUNT(c.id) FROM 'check' c WHERE c.dateTime BETWEEN :start AND :end")
     suspend fun getCheckCountByPeriod(start: String, end: String): Int
@@ -105,5 +100,9 @@ interface PaychecksDao {
     @Query("SELECT SUM(c.totalSum) FROM 'check' c WHERE c.dateTime BETWEEN :start AND :end")
     suspend fun getCheckTotalSumByPeriod(start: String, end: String): Long?
 
+    @Query("SELECT * FROM goods WHERE name LIKE '%' || :good || '%' ORDER BY price DESC")
+    suspend fun searchByGoodsName(good: String): List<GoodEntity>
 
+    @Query("SELECT * FROM 'check' WHERE name LIKE '%' || :checkName || '%'")
+    suspend fun searchByChecksName(checkName: String): List<CheckEntity>
 }

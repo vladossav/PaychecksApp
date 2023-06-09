@@ -8,16 +8,18 @@ import ru.savenkov.paychecksapp.presentation.model.CheckAll
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
 
 interface CheckRepository {
+    //check
     suspend fun getCheckById(id: Long): CheckAll?
     suspend fun getCheckFromApi(qrRaw: String): CheckItem?
     suspend fun saveCheck(checkItem: CheckItem, name: String, category: String?)
     suspend fun removeCheckById(id: Long)
+    suspend fun updateCheckName(checkId: Long, newName: String)
+    suspend fun updateCheckCategory(checkId: Long, category: String?)
 
     //saved
-    suspend fun getCheckWithCategory(category: String): List<Check>
-    suspend fun getCheckList(): List<Check>
-    suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<Check>
     suspend fun getCheckListByParams(category: String?, startDate: String, endDate: String, startSum: String, endSum: String): List<Check>
+    suspend fun getCheckListBySearch(search: String): List<Check>
+    suspend fun getGoodsListBySearch(search: String): List<CheckGood>
 
     val categoryList: Flow<List<String>>
     suspend fun saveCategory(category: String)

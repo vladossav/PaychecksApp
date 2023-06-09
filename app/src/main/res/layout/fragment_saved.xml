@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:closeIcon="@drawable/search_close_icon"
+        app:showAsAction="always"
         android:iconifiedByDefault="false"
         android:inputType="text"
         android:backgroundTint="@color/background_blue"
-        android:queryHint="Поиск"
+        android:queryHint="Поиск по чекам и товарам"
         android:queryBackground="@android:color/transparent"
         android:background="@drawable/search_background"
         android:layout_marginVertical="10dp"
@@ -88,5 +89,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sort_period"
         />
+
+    <TextView
+        android:id="@+id/saved_list_empty_label"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:visibility="gone"
+        android:text="@string/saved_list_is_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/saved_holder"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

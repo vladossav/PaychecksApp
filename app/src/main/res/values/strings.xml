@@ -22,6 +22,7 @@
     <string name="check_close_button">Закрыть</string>
     <string name="check_save_button">Сохранить</string>
     <string name="check_delete_button">Удалить</string>
+    <string name="check_category_button_default">Без категории</string>
 
     <string name="check_dialog_new_category_title">Выберите категорию чека</string>
     <string name="check_dialog_new_category_radio_edit_text">Новая категория</string>
@@ -34,6 +35,7 @@
     <string name="statistics_sort_goods_by_desc_price">По убыванию цены</string>
     <string name="statistics_sort_period_default_label">За все время</string>
 
+    <string name="saved_list_is_empty">Ничего не найдено</string>
     <string name="saved_sort_date_by_bought">По дате покупки</string>
     <string name="saved_sort_date_by_check_add">По дате добавления</string>
     <string name="saved_sort_period">Период</string>

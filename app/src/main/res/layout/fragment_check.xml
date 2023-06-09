@@ -39,11 +39,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkName"
-        app:layout_constraintBottom_toTopOf="@id/close_button"
+        app:layout_constraintBottom_toTopOf="@id/save_delete_button"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
-    <com.google.android.material.button.MaterialButton
+    <!--<com.google.android.material.button.MaterialButton
         android:id="@+id/close_button"
         android:text="@string/check_close_button"
         android:layout_width="115dp"
@@ -54,9 +54,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/category_button"
-        />
+        />-->
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <!--<androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/category_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,18 +65,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/check_holder"
         android:background="@drawable/add_category"
-        />
+        />-->
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/category_button"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:paddingVertical="5dp"
+        android:text="@string/check_category_button_default"
+        style="@style/Widget.MaterialComponents.Chip.Action"
+        app:ensureMinTouchTargetSize="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/check_holder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/save_delete_button"
+        app:cardCornerRadius="25dp">
+
+    </com.google.android.material.chip.Chip>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_delete_button"
         android:text="@string/check_save_button"
-        android:layout_width="115dp"
+        android:layout_width="130dp"
         android:layout_height="40dp"
         android:textAllCaps="false"
-        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="30dp"
         app:layout_constraintTop_toBottomOf="@id/check_holder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/category_button"
         app:layout_constraintEnd_toEndOf="parent"
         />
 

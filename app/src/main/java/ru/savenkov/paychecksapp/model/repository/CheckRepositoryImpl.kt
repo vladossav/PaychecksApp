@@ -20,6 +20,16 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
     private val dao = db.getPaychecksDao()
     private val api = ProverkachekaApi.create()
 
+    override suspend fun getCheckListBySearch(search: String): List<Check> {
+        val list = dao.searchByChecksName(search)
+        return Converter.toView(list)
+    }
+
+    override suspend fun getGoodsListBySearch(search: String): List<CheckGood> {
+        val list = dao.searchByGoodsName(search)
+        return Converter.goodsToView(list)
+    }
+
     override val categoryList: Flow<List<String>> = dao.getCategoryList().map {
         Converter.categoryToView(it)
     }
@@ -30,22 +40,6 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         } catch (err: Exception) {
             Log.e("Room",err.message.toString())
         }
-    }
-
-    override suspend fun getCheckWithCategory(category: String): List<Check>  {
-        Log.d("Room", "getCheckWithCategory")
-        val listEntity = dao.getCheckWithCategoryList(category)
-        return Converter.toView(listEntity)
-    }
-
-    override suspend fun getCheckList(): List<Check> {
-        val listEntity = dao.getCheckList()
-        return Converter.toView(listEntity)
-    }
-
-    override suspend fun getCheckListByPeriod(startDate: String, endDate: String): List<Check> {
-        val listEntity = dao.getCheckListByPeriod(startDate, endDate)
-        return Converter.toView(listEntity)
     }
 
     override suspend fun saveCategory(category: String) {
@@ -91,6 +85,14 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
         return Converter.toView(list)
     }
 
+    override suspend fun updateCheckName(checkId: Long, newName: String) {
+        dao.updateCheckName(checkId, newName)
+    }
+
+    override suspend fun updateCheckCategory(checkId: Long, category: String?) {
+        dao.updateCheckCategory(checkId, category)
+    }
+
     override suspend fun getStatisticsItemByPeriod(startDate: String, endDate: String): StatisticsItem {
         val categoryCountList = dao.getCategoryCountListByPeriod(startDate, endDate)
         val checkAmount = dao.getCheckCountByPeriod(startDate, endDate)
@@ -123,14 +125,11 @@ class CheckRepositoryImpl(db: AppDatabase): CheckRepository {
             api.getCheck(qrRaw)
         } catch (e: IOException) {
             Log.e("CheckApi", "IOException: ${e.message}")
-            //loading.postValue(false)
             return null
         } catch (e: HttpException) {
             Log.e("CheckApi", "HttpException: ${e.message}")
-            //loading.postValue(false)
             return null
         } catch (e: Exception) {
-            //loading.postValue(false)
             Log.e("CheckApi",e.message.toString())
             Log.e("CheckApi","Error: Some troubles on server! Try later!")
             return null

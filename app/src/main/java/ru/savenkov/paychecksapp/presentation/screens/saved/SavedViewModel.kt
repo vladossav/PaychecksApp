@@ -7,25 +7,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.savenkov.paychecksapp.presentation.model.Check
+import ru.savenkov.paychecksapp.presentation.model.SavedAdapterItem
 import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
-    var checksList = MutableLiveData<List<Check>>()
+    var checksList = MutableLiveData<List<SavedAdapterItem>>()
     val categoryList = repository.categoryList.asLiveData()
     var sortSavedSortParams = SavedSortParams()
-
-    fun getChecksWithCategory(category: String) = viewModelScope.launch(Dispatchers.IO) {
-        val list = repository.getCheckWithCategory(category)
-        checksList.postValue(list)
-    }
-
-    fun getCheckList() = viewModelScope.launch(Dispatchers.IO) {
-        val list = repository.getCheckList()
-        checksList.postValue(list)
-    }
 
     fun getCheckListBySortParams() = viewModelScope.launch(Dispatchers.IO) {
         Log.d("Room", "Filter: $sortSavedSortParams")
@@ -35,6 +23,12 @@ class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
         checksList.postValue(list)
     }
 
+    fun getCheckListBySearch(search: String) = viewModelScope.launch(Dispatchers.IO) {
+        val listChecks = repository.getCheckListBySearch(search)
+        val listGoods = repository.getGoodsListBySearch(search)
+        val list = listOf(listChecks, listGoods).flatten()
+        checksList.postValue(list)
+    }
 
 
 }

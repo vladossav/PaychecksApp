@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.animation.Easing
@@ -19,7 +18,6 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.android.material.chip.Chip
-import com.google.android.material.datepicker.MaterialDatePicker
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.presentation.model.StatisticsItem
 import ru.savenkov.paychecksapp.presentation.model.CheckGood
@@ -49,7 +47,7 @@ class StatisticAdapter(private val onSortClick: (Int) -> Unit): RecyclerView.Ada
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is GoodViewHolder -> holder.bind(position, statisticList[position] as CheckGood)
+            is GoodViewHolder -> holder.bind(statisticList[position] as CheckGood)
             is StatisticViewHolder -> holder.bind(statisticList[position] as StatisticsItem)
         }
     }
@@ -67,8 +65,7 @@ class GoodViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.statistic_good_item, parent, false)
 ) {
 
-    fun bind(number: Int, item: CheckGood) {
-        itemView.findViewById<TextView>(R.id.goodNumber).text = number.toString()
+    fun bind(item: CheckGood) {
         itemView.findViewById<TextView>(R.id.goodName).text = item.name
         itemView.findViewById<TextView>(R.id.goodPrice).text = item.price
     }

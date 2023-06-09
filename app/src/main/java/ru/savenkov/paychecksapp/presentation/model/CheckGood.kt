@@ -7,4 +7,4 @@ data class CheckGood(
     val price: String,
     val quantity: String,
     val sum: String
-) : CheckAdapterItem, StatisticAdapterItem
+) : CheckAdapterItem, StatisticAdapterItem, SavedAdapterItem

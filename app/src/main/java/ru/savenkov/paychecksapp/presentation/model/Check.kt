@@ -6,4 +6,4 @@ data class Check(
     val dateTime: String,
     val category: String?,
     val totalSum: String
-)
+): SavedAdapterItem

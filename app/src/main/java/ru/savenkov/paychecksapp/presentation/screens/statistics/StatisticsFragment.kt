@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.Pair
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
@@ -14,6 +15,7 @@ import ru.savenkov.paychecksapp.App
 import ru.savenkov.paychecksapp.R
 import ru.savenkov.paychecksapp.converter.Converter
 import ru.savenkov.paychecksapp.databinding.FragmentStatisticsBinding
+import ru.savenkov.paychecksapp.presentation.model.CheckGood
 
 
 class StatisticsFragment : Fragment() {
@@ -40,8 +42,8 @@ class StatisticsFragment : Fragment() {
     }
 
     override fun onResume() {
+        viewModel.sortPeriodDate = kotlin.Pair("0","9")
         viewModel.getStatisticsList()
-
         super.onResume()
     }
 
@@ -57,6 +59,7 @@ class StatisticsFragment : Fragment() {
         }
         binding.statisticsHolder.adapter = adapter
         viewModel.statisticList.observe(viewLifecycleOwner) {
+            binding.savedListEmptyLabel.isVisible = it.size == 1
             adapter.statisticList = it
         }
 

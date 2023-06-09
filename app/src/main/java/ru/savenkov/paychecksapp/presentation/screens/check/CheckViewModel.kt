@@ -38,11 +38,11 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     }
 
     fun updateCheckName() = viewModelScope.launch(Dispatchers.IO) {
-
+        repository.updateCheckName(checkAll.value!!.checkInfo.id, checkName.value!!)
     }
 
     fun updateCheckCategory() = viewModelScope.launch(Dispatchers.IO) {
-
+        repository.updateCheckCategory(checkAll.value!!.checkInfo.id, checkCategory.value)
     }
 
     fun getCheck(qrRaw: String?): Boolean {
@@ -64,12 +64,8 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     }
 
     fun makeSaveDeleteAction() {
-        if (checkSavedState.value == CheckSavedState.NOT_SAVED) {
-            saveCheck()
-        }
-        else {
-            removeCheck()
-        }
+        if (checkSavedState.value == CheckSavedState.NOT_SAVED) saveCheck()
+        else removeCheck()
     }
 
     fun getCheckById(id: Long) = viewModelScope.launch(Dispatchers.IO) {
@@ -85,7 +81,7 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     }
 
     private fun getDefaultCheckName(): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val currentDateAndTime: String = sdf.format(Date())
         return "Чек от $currentDateAndTime"
     }

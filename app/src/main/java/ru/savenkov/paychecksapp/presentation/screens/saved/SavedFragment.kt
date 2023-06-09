@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.core.util.Pair
 import androidx.core.view.isVisible
@@ -43,7 +44,7 @@ class SavedFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_navigation_saved_to_checkFragment,
                 bundleOf(CheckFragment.CHECK_ID_KEY to checkId)
-                )
+            )
         }
 
         val categoryAdapter = CategoryAdapter {category ->
@@ -61,9 +62,21 @@ class SavedFragment : Fragment() {
             it.isVisible = false
         }
 
+        binding.searchField.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.isNullOrBlank()) return true
+                viewModel.getCheckListBySearch(query)
+                return false
+            }
+        })
+
         setFiltersFromSorting()
 
         viewModel.checksList.observe(viewLifecycleOwner) {
+            binding.savedListEmptyLabel.isVisible = it.isNullOrEmpty()
             savedChecksAdapter.checkList = it
         }
 
@@ -128,7 +141,7 @@ class SavedFragment : Fragment() {
                 )
             )
             .build()
-        datePickerDialog.show(childFragmentManager, "TAFAF")
+        datePickerDialog.show(childFragmentManager, "DatePicker")
 
         datePickerDialog.addOnPositiveButtonClickListener {
             val startDate = Converter.convertTimeToDate(it.first)
