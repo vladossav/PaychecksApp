@@ -7,20 +7,11 @@ import java.io.Serializable
 
 @JsonClass(generateAdapter = true)
 data class CheckItem(
-    val code: Int = 0,
-    //КОД ОТВЕТА:
-    //0 - чек некорректен,
-    //1 - данные чека получены (успешный запрос),
-    //2 - данные чека пока не получены,
-    //3 - превышено кол-во запросов,
-    //4 - ожидание перед повторным запросом,
-    //5 - прочее (данные не получены)
     val data: Data = Data()
 ): Serializable {
     @JsonClass(generateAdapter = true)
     data class Data(
-        @Json(name = "json")
-        val jsonObj: JsonObj = JsonObj()
+        @Json(name = "json") val jsonObj: JsonObj = JsonObj()
     ) {
         @JsonClass(generateAdapter = true)
         data class JsonObj(
@@ -29,10 +20,6 @@ data class CheckItem(
             val operator: String = "", //кассир
             val shiftNumber: Int = 0, //Смена
             val operationType: Int = 0, //Тип операции
-            //1 - Приход
-            //2 - Возврат прихода
-            //3 - Расход
-            //4 - Возврат расхода
             val items: List<Item> = listOf(), //товары
             val totalSum: Int = 0, //ИТОГО
 

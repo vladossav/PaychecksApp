@@ -8,7 +8,6 @@ import java.util.*
 
 object Converter {
 
-
     fun toDatabase(
         qrRaw: String, checkItem: CheckItem, name: String, category: String? = "",
         loadedAt: String

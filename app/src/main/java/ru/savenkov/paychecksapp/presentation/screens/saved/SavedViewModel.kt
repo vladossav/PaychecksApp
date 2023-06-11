@@ -1,6 +1,5 @@
 package ru.savenkov.paychecksapp.presentation.screens.saved
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -16,7 +15,6 @@ class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
     var sortSavedSortParams = SavedSortParams()
 
     fun getCheckListBySortParams() = viewModelScope.launch(Dispatchers.IO) {
-        Log.d("Room", "Filter: $sortSavedSortParams")
         val list = repository.getCheckListByParams(sortSavedSortParams.category,
         sortSavedSortParams.periodFrom, sortSavedSortParams.periodTill,
         sortSavedSortParams.sumFrom, sortSavedSortParams.sumTill)
@@ -29,6 +27,5 @@ class SavedViewModel(private val repository: CheckRepository) : ViewModel() {
         val list = listOf(listChecks, listGoods).flatten()
         checksList.postValue(list)
     }
-
 
 }

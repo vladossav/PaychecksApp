@@ -8,32 +8,6 @@ import ru.savenkov.paychecksapp.model.room.entities.*
 @Dao
 interface PaychecksDao {
 
-    @Insert
-    suspend fun insertCheck(checkEntity: CheckEntity): Long
-
-    @Query("DELETE FROM 'check' WHERE id=:id")
-    suspend fun removeCheckById(id: Long)
-
-    @Insert
-    suspend fun insertCheckDetails(checkDetailsEntity: CheckDetailsEntity)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertCategory(categoryEntity: CategoryEntity)
-
-    @Insert
-    suspend fun insertGoodsList(goodEntity: List<GoodEntity>)
-
-    @Transaction
-    suspend fun insertAllCheckInfo(check: CheckAllInfoTuple) {
-        val id = insertCheck(check.check)
-        check.details.checkId = id
-        check.goods.map { good ->
-            good.checkId = id
-        }
-        insertCheckDetails(check.details)
-        insertGoodsList(check.goods)
-    }
-
     @Query("SELECT * FROM 'check' c " +
             "WHERE c.id = :checkId")
     fun getCheckById(checkId: Long): CheckEntity
@@ -45,8 +19,9 @@ interface PaychecksDao {
             "WHERE c.dateTime BETWEEN :startDate AND :endDate " +
             "AND c.totalSum BETWEEN :startSum AND :endSum " +
             "AND c.category = :category")
-    suspend fun getCheckListByPeriodByTotalSumWithCategory(category: String, startDate: String, endDate: String,
-                                               startSum: String, endSum: String): List<CheckEntity>
+    suspend fun getCheckListByPeriodByTotalSumWithCategory(category: String, startDate: String,
+                                                           endDate: String, startSum: String,
+                                                           endSum: String): List<CheckEntity>
 
     @Query("SELECT * FROM `check` c " +
             "WHERE c.dateTime BETWEEN :startDate AND :endDate " +
@@ -105,4 +80,30 @@ interface PaychecksDao {
 
     @Query("SELECT * FROM 'check' WHERE name LIKE '%' || :checkName || '%'")
     suspend fun searchByChecksName(checkName: String): List<CheckEntity>
+
+    @Insert
+    suspend fun insertCheck(checkEntity: CheckEntity): Long
+
+    @Query("DELETE FROM 'check' WHERE id=:id")
+    suspend fun removeCheckById(id: Long)
+
+    @Insert
+    suspend fun insertCheckDetails(checkDetailsEntity: CheckDetailsEntity)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCategory(categoryEntity: CategoryEntity)
+
+    @Insert
+    suspend fun insertGoodsList(goodEntity: List<GoodEntity>)
+
+    @Transaction
+    suspend fun insertAllCheckInfo(check: CheckAllInfoTuple) {
+        val id = insertCheck(check.check)
+        check.details.checkId = id
+        check.goods.map { good ->
+            good.checkId = id
+        }
+        insertCheckDetails(check.details)
+        insertGoodsList(check.goods)
+    }
 }

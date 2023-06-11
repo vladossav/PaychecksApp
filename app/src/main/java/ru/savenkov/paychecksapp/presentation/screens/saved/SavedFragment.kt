@@ -40,7 +40,7 @@ class SavedFragment : Fragment() {
     ): View {
         _binding = FragmentSavedBinding.inflate(inflater, container, false)
 
-        val savedChecksAdapter = SavedChecksAdapter{checkId ->
+        val savedChecksAdapter = SavedChecksAdapter {checkId ->
             findNavController().navigate(
                 R.id.action_navigation_saved_to_checkFragment,
                 bundleOf(CheckFragment.CHECK_ID_KEY to checkId)

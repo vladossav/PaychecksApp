@@ -2,7 +2,7 @@ package ru.savenkov.paychecksapp
 
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 
-val data: CheckItem = CheckItem(
+val mockData: CheckItem = CheckItem(
     data = CheckItem.Data(
         CheckItem.Data.JsonObj(
             operationType = 1,
@@ -93,30 +93,5 @@ val data: CheckItem = CheckItem(
             user="ООО \"Перспектива\"",
             userInn="7017361618"
         )
-    ),
-    code = 1
+    )
 )
-
-/*
-val checkItem = data.data.jsonObj
-
-val checkEntity = CheckEntity(0,
-    checkItem.dateTime,
-    null,
-    checkItem.totalSum
-)
-
-val checkDetailsEntity = CheckDetailsEntity(
-)
-
-
-val goodsEntity = checkItem.items.map {
-    GoodEntity(0, checkEntity.id,it.name,
-        it.price, it.quantity, it.sum)
-}
-
-
-val checkAllInfoEntity = CheckAllInfoTuple(
-    checkEntity, checkDetailsEntity,
-    goodsEntity
-)*/

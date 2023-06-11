@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.savenkov.paychecksapp.converter.Converter
-import ru.savenkov.paychecksapp.data
 import ru.savenkov.paychecksapp.model.network.data.CheckItem
 import ru.savenkov.paychecksapp.presentation.model.CheckAll
 import ru.savenkov.paychecksapp.presentation.repository.CheckRepository
@@ -24,12 +23,6 @@ class CheckViewModel(private val repository: CheckRepository): ViewModel() {
     private val checkAllFromApi = MutableLiveData<CheckItem>()
     var qrCodeRaw: String = "null"
 
-
-    fun getCheckFromMock() {
-        checkAllFromApi.value = data
-        _checkAll.value = Converter.fullCheckToView("  ", data)
-        checkName.value = getCurrentDateTime()
-    }
 
     fun updateCheckName() = viewModelScope.launch(Dispatchers.IO) {
         repository.updateCheckName(checkAll.value!!.checkInfo.id, checkName.value!!)

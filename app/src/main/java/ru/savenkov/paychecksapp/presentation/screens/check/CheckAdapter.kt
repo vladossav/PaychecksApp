@@ -1,7 +1,5 @@
 package ru.savenkov.paychecksapp.presentation.screens.check
 
-import android.R.attr.bitmap
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,8 +16,7 @@ import ru.savenkov.paychecksapp.presentation.model.CheckGood
 import ru.savenkov.paychecksapp.presentation.model.CheckInfo
 import ru.savenkov.paychecksapp.presentation.util.RecyclerDiffUtil
 
-
-class CheckGoodsAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CheckAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var checkList: List<CheckAdapterItem> = emptyList()
     set(value) {
         val difResult = DiffUtil.calculateDiff(RecyclerDiffUtil(field, value))

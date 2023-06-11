@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -39,9 +38,7 @@ class CheckFragment : Fragment() {
         if (arguments?.containsKey(QR_RAW_KEY) == true) {
             viewModel.checkSavedState.value = CheckSavedState.NOT_SAVED
             val qrRaw = requireArguments().getString(QR_RAW_KEY)
-            if (qrRaw == "mock") viewModel.getCheckFromMock()
-            if (!viewModel.getCheck(qrRaw))
-                Toast.makeText(context, "Проверьте корректность qr-кода!", Toast.LENGTH_LONG).show()
+            viewModel.getCheck(qrRaw)
             Log.d("CheckFragment", qrRaw.toString())
         }
 
@@ -51,8 +48,6 @@ class CheckFragment : Fragment() {
             viewModel.getCheckById(checkId)
             Log.d("CheckFragment", checkId.toString())
         }
-
-
     }
 
     override fun onCreateView(
@@ -65,8 +60,8 @@ class CheckFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val goodsAdapter = CheckGoodsAdapter()
-        binding.checkHolder.adapter = goodsAdapter
+        val checkAdapter = CheckAdapter()
+        binding.checkHolder.adapter = checkAdapter
 
         setFragmentResultListener(CategoryDialogFragment.CATEGORY_REQUEST_KEY) { _, bundle ->
             viewModel.checkCategory.value = bundle.getString(CHECK_CATEGORY_KEY)
@@ -105,7 +100,7 @@ class CheckFragment : Fragment() {
             val list = it.checkGoods as ArrayList<CheckAdapterItem>
             list.add(0, it.checkInfo)
             list.add(it.checkInfo)
-            goodsAdapter.checkList = list
+            checkAdapter.checkList = list
         }
     }
 

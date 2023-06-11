@@ -43,10 +43,6 @@ class ScanFragment : Fragment() {
     ): View {
         binding = FragmentScanBinding.inflate(inflater, container, false)
 
-        /*findNavController().navigate(
-            R.id.action_navigation_scan_to_checkFragment,
-            bundleOf(CheckFragment.QR_RAW_KEY to "mock")
-        )*/
         initQrScanner()
 
         return binding!!.root
@@ -81,7 +77,6 @@ class ScanFragment : Fragment() {
                         R.id.action_navigation_scan_to_checkFragment,
                         bundleOf(CheckFragment.QR_RAW_KEY to it.text)
                     )
-                    Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
                 }
             }
             errorCallback = ErrorCallback {
